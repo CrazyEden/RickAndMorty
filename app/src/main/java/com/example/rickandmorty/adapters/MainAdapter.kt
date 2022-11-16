@@ -2,19 +2,21 @@ package com.example.rickandmorty.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.ItemMainBinding
 
-class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter: PagingDataAdapter<Entity,MainAdapter.MainViewHolder>(EntityDiffCallback()) {
     class MainViewHolder(val binding:ItemMainBinding):RecyclerView.ViewHolder(binding.root)
-    var list = listOf<Entity>()
-
-    fun setData(list: List<Entity>){
-        this.list = list
-        notifyDataSetChanged()
-    }
+//    var list = listOf<Entity>()
+//
+//    fun setData(list: List<Entity>){
+//        this.list = list
+//        notifyDataSetChanged()
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,9 +25,24 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.binding.avatarka.load(list[position].image)
-        holder.binding.name.text = list[position].name
+        val item = getItem(position)
+            holder.binding.avatarka.load(item?.image)
+            holder.binding.name.text = item?.name
+
+
     }
 
-    override fun getItemCount(): Int = list.size
+//    override fun getItemCount(): Int = gets
+}
+
+class EntityDiffCallback :DiffUtil.ItemCallback<Entity>(){
+    override fun areItemsTheSame(oldItem: Entity, newItem: Entity): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Entity, newItem: Entity): Boolean {
+        return oldItem==newItem
+    }
+
+
 }
