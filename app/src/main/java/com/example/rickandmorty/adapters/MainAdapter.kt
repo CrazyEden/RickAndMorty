@@ -11,12 +11,6 @@ import com.example.rickandmorty.databinding.ItemMainBinding
 
 class MainAdapter: PagingDataAdapter<Entity,MainAdapter.MainViewHolder>(EntityDiffCallback()) {
     class MainViewHolder(val binding:ItemMainBinding):RecyclerView.ViewHolder(binding.root)
-//    var list = listOf<Entity>()
-//
-//    fun setData(list: List<Entity>){
-//        this.list = list
-//        notifyDataSetChanged()
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,15 +18,12 @@ class MainAdapter: PagingDataAdapter<Entity,MainAdapter.MainViewHolder>(EntityDi
         return MainViewHolder((binding))
     }
 
+
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val item = getItem(position)
-            holder.binding.avatarka.load(item?.image)
-            holder.binding.name.text = item?.name
-
-
+        holder.binding.avatarka.load(item?.image)
+        holder.binding.name.text = item?.name
     }
-
-//    override fun getItemCount(): Int = gets
 }
 
 class EntityDiffCallback :DiffUtil.ItemCallback<Entity>(){

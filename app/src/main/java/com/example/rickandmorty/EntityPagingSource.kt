@@ -19,18 +19,17 @@ class EntityPagingSource@Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Entity> {
         val pageId = params.key ?: 1
         val res = networkRep.getPage(pageId)
-//        println("PREV AND NEXT${res.body()?.info?.prev?.last()?.toInt()}")
-//        println("PREV AND NEXT${res.body()?.info?.next?.last()?.toInt()}")
-//        val url = res.body()?.info?.next
 
-        if (res.isSuccessful) {
-            val entitys = res.body()!!.results
-            return LoadResult.Page(
-                data = entitys,
-                prevKey = 2,
-                nextKey = 2
+        val pKey = res.body()?.info?.prev?.split("=")?.get(1)?.toInt()
+        val nKey = res.body()?.info?.next?.split("=")?.get(1)?.toInt()
+        return if (res.isSuccessful) {
+            val entities = res.body()!!.results
+            LoadResult.Page(
+                data = entities,
+                prevKey = pKey,
+                nextKey = nKey
             )
-        }else return LoadResult.Error(HttpException(res))
+        }else LoadResult.Error(HttpException(res))
 
     }
 

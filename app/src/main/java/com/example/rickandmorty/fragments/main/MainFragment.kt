@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.rickandmorty.R
 import com.example.rickandmorty.adapters.MainAdapter
 import com.example.rickandmorty.databinding.FragmentMainBinding
@@ -27,7 +27,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater,container,false)
-        binding.rcView.layoutManager = LinearLayoutManager(context)
+        binding.rcView.layoutManager = GridLayoutManager(context,2)
         val adapter = MainAdapter()
         binding.rcView.adapter = adapter
         viewModel.load()
