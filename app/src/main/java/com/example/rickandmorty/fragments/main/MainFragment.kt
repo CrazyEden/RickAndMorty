@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.rickandmorty.R
 import com.example.rickandmorty.adapters.MainAdapter
+import com.example.rickandmorty.adapters.MainLoadStateAdapter
 import com.example.rickandmorty.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,13 +30,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.inflate(inflater,container,false)
         binding.rcView.layoutManager = GridLayoutManager(context,2)
         val adapter = MainAdapter()
-        binding.rcView.adapter = adapter
-        viewModel.load()
-
-
-        viewModel.liveData.observe(viewLifecycleOwner){
-//            adapter.setData(it)
-        }
+        binding.rcView.adapter = adapter.withLoadStateFooter(MainLoadStateAdapter())
 
         lifecycleScope.launch {
             viewModel.sFlof.collectLatest  (adapter::submitData )

@@ -25,4 +25,5 @@ class NetworkRep@Inject constructor(
             pagingSourceFactory = {EntityPagingSource(network)}
         ).flow
     }
+    suspend fun getEntity(id:Int) = network.getOneEntity(id)
 }
