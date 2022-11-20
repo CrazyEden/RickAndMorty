@@ -1,21 +1,22 @@
 package com.example.rickandmorty.adapters
 
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.ItemMainBinding
+import com.example.rickandmorty.fragments.info.InfoFragment
 
+typealias EntityFragment = (bundle:Bundle) ->Unit
 
-class PagingAdapter: PagingDataAdapter<Entity,PagingAdapter.MainViewHolder>(EntityDiffCallback()) {
+class PagingAdapter(private val entityFragment: EntityFragment): PagingDataAdapter<Entity,PagingAdapter.MainViewHolder>(EntityDiffCallback()) {
     class MainViewHolder(val binding:ItemMainBinding):RecyclerView.ViewHolder(binding.root)
 
 
@@ -30,16 +31,16 @@ class PagingAdapter: PagingDataAdapter<Entity,PagingAdapter.MainViewHolder>(Enti
         val item = getItem(position)
 
         holder.binding.itemMain.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mainFragment_to_infoFragment, bundleOf(
-                "imageView" to item?.image,
-                "name" to item?.name,
-                "status" to item?.status,
-                "species" to item?.species,
-                "type" to item?.type,
-                "gender" to item?.gender,
-                "nameOri" to item?.origin?.name,
-                "nameLoc" to item?.location?.name,
-                "created" to item?.created)
+            entityFragment(bundleOf(
+                InfoFragment.IMAGEVIEW_KEY  to item?.image,
+                InfoFragment.NAME_KEY       to item?.name,
+                InfoFragment.STATUS_KEY     to item?.status,
+                InfoFragment.SPECIES_KEY    to item?.species,
+                InfoFragment.TYPE_KEY       to item?.type,
+                InfoFragment.GENDER_KEY     to item?.gender,
+                InfoFragment.NAMEORI_KEY    to item?.origin?.name,
+                InfoFragment.NAMELOC_KEY    to item?.location?.name,
+                InfoFragment.CREATED_KEY    to item?.created)
             )
         }
         try {
