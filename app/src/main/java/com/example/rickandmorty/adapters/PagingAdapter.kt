@@ -9,12 +9,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.ItemMainBinding
 
 
-class MainAdapter: PagingDataAdapter<Entity,MainAdapter.MainViewHolder>(EntityDiffCallback()) {
+class PagingAdapter: PagingDataAdapter<Entity,PagingAdapter.MainViewHolder>(EntityDiffCallback()) {
     class MainViewHolder(val binding:ItemMainBinding):RecyclerView.ViewHolder(binding.root)
 
 
@@ -41,7 +42,14 @@ class MainAdapter: PagingDataAdapter<Entity,MainAdapter.MainViewHolder>(EntityDi
                 "created" to item?.created)
             )
         }
-        holder.binding.avatarka.load(item?.image)
+        try {
+            holder.binding.avatarka.load(item?.image){
+                crossfade(true)
+                transformations(CircleCropTransformation())
+            }
+        }catch (e :Exception){
+            println("kraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaashhhhhhhh")
+        }
         holder.binding.name.text = item?.name
     }
 }

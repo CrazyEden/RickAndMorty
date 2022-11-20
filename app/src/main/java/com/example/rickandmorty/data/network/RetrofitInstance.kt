@@ -12,15 +12,19 @@ object RetrofitInstance {
         Retrofit.Builder()
             .baseUrl(Const.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            //.client(client)
+            .client(client)
             .build()
+
     }
     val api: ApiInterface by lazy {
         retrofit.create(ApiInterface::class.java)
     }
     private val client by lazy {
         OkHttpClient.Builder()
-            .readTimeout(10000, java.util.concurrent.TimeUnit.SECONDS)
+//            .readTimeout(10000, java.util.concurrent.TimeUnit.SECONDS)
+//            .callTimeout(10000, java.util.concurrent.TimeUnit.SECONDS)
+//            .connectTimeout(10000, java.util.concurrent.TimeUnit.SECONDS)
+            //.protocols(Collections.singletonList(Protocol.HTTP_1_1))
             .build()
     }
 }
