@@ -9,20 +9,19 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.data.model.Entity
-import com.example.rickandmorty.databinding.ItemMainBinding
+import com.example.rickandmorty.databinding.ItemEntityBinding
 import com.example.rickandmorty.fragments.info.InfoFragment
 
-typealias EntityFragment = (bundle:Bundle) ->Unit
+typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
-class PagingAdapter(private val entityFragment: EntityFragment): PagingDataAdapter<Entity,PagingAdapter.MainViewHolder>(EntityDiffCallback()) {
-    class MainViewHolder(val binding:ItemMainBinding):RecyclerView.ViewHolder(binding.root)
+class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction): PagingDataAdapter<Entity,EntityPagingAdapter.MainViewHolder>(EntityDiffCallback()) {
+    class MainViewHolder(val binding: ItemEntityBinding):RecyclerView.ViewHolder(binding.root)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemMainBinding.inflate(inflater,parent,false)
+        val binding = ItemEntityBinding.inflate(inflater,parent,false)
         return MainViewHolder((binding))
     }
 
@@ -31,7 +30,7 @@ class PagingAdapter(private val entityFragment: EntityFragment): PagingDataAdapt
         val item = getItem(position)
 
         holder.binding.itemMain.setOnClickListener {
-            entityFragment(bundleOf(
+            openInfoFragment(bundleOf(
                 InfoFragment.IMAGEVIEW_KEY  to item?.image,
                 InfoFragment.NAME_KEY       to item?.name,
                 InfoFragment.STATUS_KEY     to item?.status,
@@ -43,14 +42,8 @@ class PagingAdapter(private val entityFragment: EntityFragment): PagingDataAdapt
                 InfoFragment.CREATED_KEY    to item?.created)
             )
         }
-        try {
-            holder.binding.avatarka.load(item?.image){
-                crossfade(true)
-                transformations(CircleCropTransformation())
-            }
-        }catch (e :Exception){
-            println("kraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaashhhhhhhh")
-        }
+
+        holder.binding.avatarka.load(item?.image)
         holder.binding.name.text = item?.name
     }
 }

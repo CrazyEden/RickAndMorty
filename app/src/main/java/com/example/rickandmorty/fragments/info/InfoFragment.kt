@@ -21,20 +21,23 @@ class InfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInfoBinding.inflate(inflater,container,false)
-        val name = "Имя: " + arguments?.getString(IMAGEVIEW_KEY)
-        val status = "Статус: " + arguments?.getString(NAME_KEY)
-        val species = "Вид: " + arguments?.getString(STATUS_KEY)
-        val type = "Подвид: " + arguments?.getString(SPECIES_KEY)
-        val gender = "Гендер: " + arguments?.getString(TYPE_KEY)
-        val nameOri = "Родное место: " + arguments?.getString(GENDER_KEY)
-        val nameLoc = "Последнее местоположение: " + arguments?.getString(NAMEORI_KEY)
-        val created = "Дата появления в данной базе данных: " + arguments?.getString(NAMELOC_KEY)
+        val name = "Имя: " + arguments?.getString(NAME_KEY)
+        val status = "Статус: " + arguments?.getString(STATUS_KEY)
+        val species = "Вид: " + arguments?.getString(SPECIES_KEY)
+        val typeArg = arguments?.getString(TYPE_KEY)
+        val type = "Подвид: $typeArg"
+        val gender = "Гендер: " + arguments?.getString(GENDER_KEY)
+        val nameOri = "Родное место: " + arguments?.getString(NAMEORI_KEY)
+        val nameLoc = "Последнее местоположение: " + arguments?.getString(NAMELOC_KEY)
+        val created = "Дата появления в данной базе данных: " + arguments?.getString(CREATED_KEY)
 
-        binding.imageView.load(arguments?.getString("imageView"))
+        binding.imageView.load(arguments?.getString(IMAGEVIEW_KEY))
         binding.name.text = name
         binding.status.text = status
         binding.species.text = species
-        binding.type.text = type
+        if (typeArg.isNullOrEmpty()) {
+            binding.type.visibility = View.GONE
+        }else binding.type.text = type
         binding.gender.text = gender
         binding.originName.text = nameOri
         binding.location.text = nameLoc

@@ -8,11 +8,11 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.databinding.ItemErrorBinding
 
-typealias TryAgain = () ->Unit
+typealias TryAgainAction = () ->Unit
 
-class MainLoadStateAdapter(private val tryAgain: TryAgain):LoadStateAdapter<MainLoadStateAdapter.Holder>(){
+class MainLoadStateAdapter(private val tryAgain: TryAgainAction):LoadStateAdapter<MainLoadStateAdapter.Holder>(){
     class Holder(private val binding: ItemErrorBinding,
-                  private val tryAgain:TryAgain):RecyclerView.ViewHolder(binding.root){
+                  private val tryAgain:TryAgainAction):RecyclerView.ViewHolder(binding.root){
         init {
             binding.errBtn.setOnClickListener {
                 tryAgain()

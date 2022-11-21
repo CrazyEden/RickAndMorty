@@ -8,7 +8,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcView"
         android:layout_gravity="center"
-        tools:listitem="@layout/item_main"
+        tools:listitem="@layout/item_entity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.main.MainFragment" />
