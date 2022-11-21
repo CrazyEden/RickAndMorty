@@ -11,55 +11,57 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="name" />
+        tools:text="name" />
 
     <TextView
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="status" />
+        tools:text="status" />
 
     <TextView
         android:id="@+id/species"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="species" />
+        tools:text="species" />
 
     <TextView
         android:id="@+id/type"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="type" />
+        tools:text="type" />
 
     <TextView
         android:id="@+id/gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="gender" />
+        tools:text="gender" />
 
     <TextView
         android:id="@+id/originName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="originName" />
+        tools:text="originName" />
     <TextView
         android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="location" />
+        tools:text="location" />
 
 
     <TextView
         android:id="@+id/created"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="created" />
+        tools:text="created" />
 
 
 </LinearLayout>

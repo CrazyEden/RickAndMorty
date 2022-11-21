@@ -30,17 +30,7 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
         val item = getItem(position)
 
         holder.binding.itemMain.setOnClickListener {
-            openInfoFragment(bundleOf(
-                InfoFragment.IMAGEVIEW_KEY  to item?.image,
-                InfoFragment.NAME_KEY       to item?.name,
-                InfoFragment.STATUS_KEY     to item?.status,
-                InfoFragment.SPECIES_KEY    to item?.species,
-                InfoFragment.TYPE_KEY       to item?.type,
-                InfoFragment.GENDER_KEY     to item?.gender,
-                InfoFragment.NAMEORI_KEY    to item?.origin?.name,
-                InfoFragment.NAMELOC_KEY    to item?.location?.name,
-                InfoFragment.CREATED_KEY    to item?.created)
-            )
+            openInfoFragment(bundleOf(InfoFragment.ENTITY_KEY to item))
         }
 
         holder.binding.avatarka.load(item?.image)

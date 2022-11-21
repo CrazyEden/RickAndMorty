@@ -13,7 +13,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val sflof = networkRep.getFlof().cachedIn(viewModelScope)
-    //stateIn(viewModelScope, SharingStarted.Lazily,PagingData.empty())
 
 
 

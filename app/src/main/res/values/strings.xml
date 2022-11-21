@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">RickAndMorty</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="try_again">Попробовать еще раз</string>
+    <string name="name">Имя: </string>
+    <string name="status">Статус: </string>
+    <string name="species">Вид: </string>
+    <string name="type">Подвид: </string>
+    <string name="gender">Гендер: </string>
+    <string name="name_origin">Родное место: </string>
+    <string name="last_known_location">Последнее местоположение: </string>
+    <string name="created_at">Дата появления в базе данных: </string>
 </resources>
