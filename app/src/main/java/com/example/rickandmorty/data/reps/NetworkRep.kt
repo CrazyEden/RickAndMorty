@@ -11,9 +11,16 @@ class NetworkRep@Inject constructor(
     private val network:ApiInterface
 ) {
 
-    fun getFlof() = Pager(
+    fun getFlof(name:String?,
+                status:String?,
+                gender:String?) = Pager(
     PagingConfig(pageSize = 20,
         initialLoadSize = 20,
         enablePlaceholders = false),
-    pagingSourceFactory = { EntityPagingSource(network) }).flow
+    pagingSourceFactory = {
+        EntityPagingSource(network,
+            name = name,
+            status = status,
+            gender = gender)
+    }).flow
 }

@@ -37,9 +37,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
         lifecycleScope.launch {
-            viewModel.sflof.collectLatest{adapter.submitData(it)}
+            viewModel.load().collectLatest{adapter.submitData(it)}
+            //TODO shared pref get last filter state
         }
 
+//        binding.LOADFILTER.setOnClickListener {
+//            lifecycleScope.launch {
+//                viewModel.load(
+//                    name = "Rick"
+//                ).collectLatest { adapter.submitData(it) }
+//            }
+//        }
         binding.mainErrorButton.setOnClickListener { adapter.retry() }
         return binding.root
     }
