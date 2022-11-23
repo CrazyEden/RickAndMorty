@@ -23,22 +23,18 @@ class EntityPagingSource(
                 status=this.status,
                 gender=this.gender
             )
-
-//            val pKey = res.body()?.info?.prev?.split("=")?.get(1)?.toInt()
-//            val nKey = res.body()?.info?.next?.split("=")?.get(1)?.toInt()
-
+            //TODO no entities by filter ->{ "error":"There is nothing here"}
             val pKey = if (pageId == 1) null else pageId.minus(1)
             val nKey = if (pageId == res.body()?.info?.pages) null else pageId.plus(1)
 
-                val entities = res.body()!!.results
-                return LoadResult.Page(
-                    data = entities,
-                    prevKey = pKey,
-                    nextKey = nKey
-                )
-
+            val entities = res.body()!!.results
+            return LoadResult.Page(
+                data = entities,
+                prevKey = pKey,
+                nextKey = nKey
+            )
         }catch (e:Exception){
-            println(e)
+            println("EntityPagingSource: $e")
             return LoadResult.Error(e)
         }
 

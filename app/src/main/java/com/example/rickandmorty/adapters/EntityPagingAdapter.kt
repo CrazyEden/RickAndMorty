@@ -28,11 +28,9 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val item = getItem(position)
-        println("LOAD ITEM ID:$position")
         holder.binding.itemMain.setOnClickListener {
             openInfoFragment(bundleOf(InfoFragment.ENTITY_KEY to item))
         }
-
         holder.binding.avatarka.load(item?.image)
         holder.binding.name.text = item?.name
     }

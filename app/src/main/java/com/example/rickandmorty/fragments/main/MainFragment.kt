@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,20 +37,39 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
+        initClickListeners()
         lifecycleScope.launch {
             viewModel.load().collectLatest{adapter.submitData(it)}
             //TODO shared pref get last filter state
         }
 
-//        binding.LOADFILTER.setOnClickListener {
-//            lifecycleScope.launch {
-//                viewModel.load(
-//                    name = "Rick"
-//                ).collectLatest { adapter.submitData(it) }
-//            }
-//        }
-        binding.mainErrorButton.setOnClickListener { adapter.retry() }
+        binding.textName.setOnEditorActionListener { _, _, _ ->
+            search()
+            true
+        }
+
         return binding.root
+    }
+    private fun search(){
+        val statusId = binding.filterStatus.checkedRadioButtonId
+        val genderId = binding.filterGender.checkedRadioButtonId
+
+        val status:String?=runCatching {
+            binding.filterStatus.findViewById<RadioButton>(statusId).text.toString()
+        }.getOrNull()
+        val gender:String?=runCatching {
+            binding.filterGender.findViewById<RadioButton>(genderId).text.toString()
+        }.getOrNull()
+
+        lifecycleScope.launch {
+            viewModel.load(
+                name=binding.textName.text.toString(),
+                status=status,
+                gender=gender
+            ).collectLatest { adapter.submitData(it) }
+        }
+        binding.searchLayout.visibility = View.GONE
+        binding.LOADFILTER.show()
     }
 
     private fun initAdapter(): ConcatAdapter {
@@ -76,7 +96,26 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }//loadStateFooter span double size https://issuetracker.google.com/u/0/issues/178460672
         return layoutManager
     }
+    private fun initClickListeners(){
+        binding.mainErrorButton.setOnClickListener { adapter.retry() }
 
+        binding.cancelSearch.setOnClickListener {
+            binding.LOADFILTER.show()
+            binding.searchLayout.visibility = View.GONE
+        }
+        binding.clearFilter.setOnClickListener {
+            binding.textName.text
+            binding.filterStatus.clearCheck()
+            binding.filterGender.clearCheck()
+        }
+        binding.search.setOnClickListener {
+            search()
+        }
+        binding.LOADFILTER.setOnClickListener {
+            binding.LOADFILTER.hide()
+            binding.searchLayout.visibility = View.VISIBLE
+        }
+    }
 
 
 
