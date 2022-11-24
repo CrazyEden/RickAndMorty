@@ -10,12 +10,14 @@
     <string name="name_origin">Родное место: </string>
     <string name="last_known_location">Последнее местоположение: </string>
     <string name="created_at">Дата появления в базе данных: </string>
-    <string name="status_alive">alive</string>
-    <string name="status_dead">dead</string>
-    <string name="status_unknown">unknown</string>
-    <string name="status_female">female</string>
-    <string name="status_male">male</string>
-    <string name="status_genderless">genderless</string>
+    <string name="status_alive" translatable="false">alive</string>
+    <string name="status_dead" translatable="false">dead</string>
+    <string name="status_unknown" translatable="false">unknown</string>
+    <string name="gender_female" translatable="false">female</string>
+    <string name="gender_male" translatable="false">male</string>
+    <string name="gender_genderless" translatable="false">genderless</string>
+    <string name="gender_unknown" translatable="false">unknown</string>
+
     <string name="cancel_search">cancel search</string>
     <string name="clear_filter">clear filter</string>
     <string name="search">search</string>

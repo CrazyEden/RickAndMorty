@@ -13,7 +13,8 @@ class NetworkRep@Inject constructor(
 
     fun getFlof(name:String?,
                 status:String?,
-                gender:String?) = Pager(
+                gender:String?,
+                mFilter:Boolean = false) = Pager(
     PagingConfig(pageSize = 20,
         initialLoadSize = 20,
         enablePlaceholders = false),
@@ -21,6 +22,7 @@ class NetworkRep@Inject constructor(
         EntityPagingSource(network,
             name = name,
             status = status,
-            gender = gender)
+            gender = gender,
+            mFilter = mFilter)
     }).flow
 }

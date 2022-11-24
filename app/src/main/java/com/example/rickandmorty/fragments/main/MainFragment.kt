@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickandmorty.R
 import com.example.rickandmorty.adapters.EntityPagingAdapter
 import com.example.rickandmorty.adapters.MainLoadStateAdapter
@@ -28,6 +30,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapter:EntityPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
+    private lateinit var textFilter:String
+    private var genderFilter:String? = null
+    private var statusFilter:String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,38 +43,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
         initClickListeners()
-        lifecycleScope.launch {
-            viewModel.load().collectLatest{adapter.submitData(it)}
-            //TODO shared pref get last filter state
-        }
-
-        binding.textName.setOnEditorActionListener { _, _, _ ->
-            search()
-            true
-        }
-
+        search(gender = viewModel.getGender(),
+            name = viewModel.getText(),
+            status = viewModel.getStatus())
+        initChangeListeners()
         return binding.root
     }
-    private fun search(){
-        val statusId = binding.filterStatus.checkedRadioButtonId
-        val genderId = binding.filterGender.checkedRadioButtonId
 
-        val status:String?=runCatching {
-            binding.filterStatus.findViewById<RadioButton>(statusId).text.toString()
-        }.getOrNull()
-        val gender:String?=runCatching {
-            binding.filterGender.findViewById<RadioButton>(genderId).text.toString()
-        }.getOrNull()
+
+
+    private fun search(name:String?,status:String?,gender:String?,mFilter:Boolean = false){
 
         lifecycleScope.launch {
             viewModel.load(
-                name=binding.textName.text.toString(),
+                name=name,
                 status=status,
-                gender=gender
+                gender=gender,
+                mFilter = mFilter
             ).collectLatest { adapter.submitData(it) }
         }
-        binding.searchLayout.visibility = View.GONE
+
+        binding.searchPanel.searchLayout.visibility = View.GONE
         binding.LOADFILTER.show()
+
     }
 
     private fun initAdapter(): ConcatAdapter {
@@ -86,38 +82,76 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         return adapter.withLoadStateFooter(loadStateFooter)
 
     }
-    private fun initLayoutManager(): GridLayoutManager {
-        val layoutManager = GridLayoutManager(context,2)
+
+    private fun initLayoutManager(): LinearLayoutManager {
+        val layoutManager =
+            GridLayoutManager(context,2)
         layoutManager.spanSizeLookup =  object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (position == adapter.itemCount  && loadStateFooter.itemCount > 0) 2
-                else 1
+                return when(adapter.getItemViewType(position)){
+                    R.layout.entity_header->2
+                    else ->{
+                        if (position == adapter.itemCount  && loadStateFooter.itemCount > 0) 2
+                        else 1
+                    }
+                }
             }
-        }//loadStateFooter span double size https://issuetracker.google.com/u/0/issues/178460672
+        }
         return layoutManager
     }
+
     private fun initClickListeners(){
         binding.mainErrorButton.setOnClickListener { adapter.retry() }
 
-        binding.cancelSearch.setOnClickListener {
+        binding.searchPanel.cancelSearch.setOnClickListener {
             binding.LOADFILTER.show()
-            binding.searchLayout.visibility = View.GONE
+            binding.searchPanel.searchLayout.visibility = View.GONE
         }
-        binding.clearFilter.setOnClickListener {
-            binding.textName.text
-            binding.filterStatus.clearCheck()
-            binding.filterGender.clearCheck()
+        binding.searchPanel.clearFilter.setOnClickListener {
+            binding.searchPanel.textName.text
+            binding.searchPanel.filterStatus.clearCheck()
+            binding.searchPanel.filterGender.clearCheck()
         }
-        binding.search.setOnClickListener {
-            search()
+        binding.searchPanel.search.setOnClickListener {
+            search(gender = genderFilter,
+            status = statusFilter,
+            name = textFilter)
         }
         binding.LOADFILTER.setOnClickListener {
             binding.LOADFILTER.hide()
-            binding.searchLayout.visibility = View.VISIBLE
+            binding.searchPanel.searchLayout.visibility = View.VISIBLE
         }
     }
 
+    private fun initChangeListeners() {
+        binding.searchPanel.textName.setOnEditorActionListener { _, _, _ ->
+            search(gender = genderFilter,
+                status = statusFilter,
+                name = textFilter)
+            true
+        }
+        binding.searchPanel.textName.addTextChangedListener {
+            textFilter = it.toString()
+        }
+        binding.searchPanel.filterStatus.setOnCheckedChangeListener { group, checkedId ->
+            statusFilter = runCatching {
+                group.findViewById<RadioButton>(checkedId).text.toString()
+            }.getOrDefault("")
+        }
 
+        binding.searchPanel.filterGender.setOnCheckedChangeListener { group, checkedId ->
+            genderFilter = runCatching {
+                group.findViewById<RadioButton>(checkedId).text?.toString()
+            }.getOrDefault("")
+        }
+    }
+
+    companion object{
+        const val NAME_SHARED_PREFERENCES = "sp"
+        const val KEY_TEXT_FILTER = "text"
+        const val KEY_GENDER_FILTER = "gender"
+        const val KEY_STATUS_FILTER = "status"
+    }
 
 
 
