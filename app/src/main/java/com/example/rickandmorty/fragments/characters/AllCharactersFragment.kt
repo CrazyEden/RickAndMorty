@@ -1,4 +1,4 @@
-package com.example.rickandmorty.fragments.main
+package com.example.rickandmorty.fragments.characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,17 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickandmorty.R
 import com.example.rickandmorty.adapters.EntityPagingAdapter
 import com.example.rickandmorty.adapters.MainLoadStateAdapter
-import com.example.rickandmorty.databinding.FragmentMainBinding
-import com.example.rickandmorty.fragments.info.InfoFragment
+import com.example.rickandmorty.databinding.FragmentAllCharactersBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainFragment : Fragment(R.layout.fragment_main) {
+class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
 
-    private lateinit var binding: FragmentMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var binding: FragmentAllCharactersBinding
+    private val viewModel: AllCharactersViewModel by viewModels()
     private lateinit var adapter:EntityPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
     private lateinit var textFilter:String
@@ -38,7 +37,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(inflater,container,false)
+        binding = FragmentAllCharactersBinding.inflate(inflater,container,false)
 
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
@@ -72,7 +71,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         adapter = EntityPagingAdapter{
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag, InfoFragment.newInstance(it))
+                .replace(R.id.fragment_container_view_tag, CharacterInfoFragment.newInstanceByEntity(it))
                 .commit()
         }
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
@@ -138,7 +137,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 group.findViewById<RadioButton>(checkedId).text.toString()
             }.getOrDefault("")
         }
-
         binding.searchPanel.filterGender.setOnCheckedChangeListener { group, checkedId ->
             genderFilter = runCatching {
                 group.findViewById<RadioButton>(checkedId).text?.toString()

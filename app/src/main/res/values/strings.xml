@@ -22,4 +22,8 @@
     <string name="clear_filter">clear filter</string>
     <string name="search">search</string>
     <string name="text_a_name_of_entity_hint">Text a name of entity</string>
+    <string name="episodes">Episodes</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_of_characters_who_have_been_seen_in_the_episode">List of characters who have been seen in the episode</string>
 </resources>

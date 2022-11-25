@@ -1,4 +1,4 @@
-package com.example.rickandmorty.fragments.main
+package com.example.rickandmorty.fragments.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class AllCharactersViewModel @Inject constructor(
     private val networkRep: NetworkRep,
     private val localStorageRepository: LocalStorageRepository
 ) : ViewModel() {

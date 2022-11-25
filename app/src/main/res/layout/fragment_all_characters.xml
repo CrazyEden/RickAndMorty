@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.main.MainFragment" >
+    tools:context=".fragments.characters.AllCharactersFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        tools:context=".fragments.main.MainFragment"
+        tools:context=".fragments.characters.AllCharactersFragment"
         tools:listitem="@layout/item_entity" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -31,6 +31,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"/>
+
     <include layout="@layout/search_layout"
         android:id="@+id/search_panel"/>
 

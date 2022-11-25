@@ -25,4 +25,7 @@ class NetworkRep@Inject constructor(
             gender = gender,
             mFilter = mFilter)
     }).flow
+    suspend fun getEpisode(id:Int) = network.getEpisodeById(id)
+
+    suspend fun getEntityListByListIds(listOfId:String) = network.getMultipleCharacters(listOfId)
 }

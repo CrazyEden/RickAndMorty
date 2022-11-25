@@ -14,7 +14,7 @@ import com.example.rickandmorty.CharacterUiModel
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.EntityHeaderBinding
 import com.example.rickandmorty.databinding.ItemEntityBinding
-import com.example.rickandmorty.fragments.info.InfoFragment
+import com.example.rickandmorty.fragments.characters.CharacterInfoFragment
 
 typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
@@ -29,7 +29,7 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
         override fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
             entityBinding.itemMain.setOnClickListener {
-                openInfoFragment!!(bundleOf(InfoFragment.ENTITY_KEY to b))
+                openInfoFragment!!(bundleOf(CharacterInfoFragment.ENTITY_KEY to b))
             }
             entityBinding.avatarka.load(b.image)
             entityBinding.name.text = b.name

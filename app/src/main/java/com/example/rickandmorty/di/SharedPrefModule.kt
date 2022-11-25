@@ -2,7 +2,7 @@ package com.example.rickandmorty.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.rickandmorty.fragments.main.MainFragment
+import com.example.rickandmorty.fragments.characters.AllCharactersFragment
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +17,6 @@ object SharedPrefModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context):SharedPreferences =
-        context.getSharedPreferences(MainFragment.NAME_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+        context.getSharedPreferences(AllCharactersFragment.NAME_SHARED_PREFERENCES,Context.MODE_PRIVATE)
 
 }
