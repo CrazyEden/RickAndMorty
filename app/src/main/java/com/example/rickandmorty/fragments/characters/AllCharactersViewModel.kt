@@ -29,12 +29,17 @@ class AllCharactersViewModel @Inject constructor(
             gender = gender?: localStorageRepository.getStateGenderFilter(),
             mFilter = mFilter
         ).cachedIn(viewModelScope).map {
-            it.insertSeparators { characterUiModel: CharacterUiModel?, characterUiModel2: CharacterUiModel? ->
-                if (characterUiModel == null || characterUiModel2 == null) return@insertSeparators null
-                if (characterUiModel is CharacterUiModel.Header || characterUiModel2 is CharacterUiModel.Header)
+            it.insertSeparators { uiModel1: CharacterUiModel?, uiModel2: CharacterUiModel? ->
+                if (uiModel1 == null && uiModel2 != null)
+                    return@insertSeparators  CharacterUiModel.Header((uiModel2 as CharacterUiModel.Item).entity.name?.get(0).toString())
+
+                if (uiModel2 == null)
                     return@insertSeparators null
-                val entity1 = (characterUiModel as CharacterUiModel.Item).entity.name?.get(0)
-                val entity2 = (characterUiModel2 as CharacterUiModel.Item).entity.name?.get(0)
+
+                if (uiModel1 is CharacterUiModel.Header || uiModel2 is CharacterUiModel.Header)
+                    return@insertSeparators null
+                val entity1 = (uiModel1 as CharacterUiModel.Item).entity.name?.get(0)
+                val entity2 = (uiModel2 as CharacterUiModel.Item).entity.name?.get(0)
                 return@insertSeparators if (entity1 != entity2){
                     CharacterUiModel.Header(entity2.toString())
                 } else null

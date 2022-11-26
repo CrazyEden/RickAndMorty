@@ -18,7 +18,9 @@ class EntityPagingSource(
     private val mFilter:Boolean = false
 ) :PagingSource<Int,CharacterUiModel>() {
     override fun getRefreshKey(state: PagingState<Int, CharacterUiModel>): Int? {
-        return null
+        val anchorn = state.anchorPosition ?: return null
+        val page = state.closestPageToPosition(anchorn) ?: return null
+        return page.prevKey?.plus(1) ?: page.nextKey?.minus(1)
     }
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterUiModel> {
         val pageId = params.key ?: 1

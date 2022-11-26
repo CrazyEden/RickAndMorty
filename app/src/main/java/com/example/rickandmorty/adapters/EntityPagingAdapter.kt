@@ -23,10 +23,10 @@ typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
 class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction): PagingDataAdapter<CharacterUiModel,EntityPagingAdapter.VHolder>(EntityDiffCallback()) {
     abstract class VHolder(view:View):RecyclerView.ViewHolder(view){
-        abstract fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?)
+        //abstract fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?)
     }
     class EntityViewHolder(private val entityBinding: ItemEntityBinding):VHolder(entityBinding.root) {
-        override fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
+        fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
             entityBinding.itemMain.setOnClickListener {
                 openInfoFragment!!(bundleOf(CharacterInfoFragment.ENTITY_KEY to b))
@@ -37,28 +37,37 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
     }
 
     class HeaderViewHolder(private val headerBinding: EntityHeaderBinding):VHolder(headerBinding.root) {
-        override fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
+        fun bind( item: CharacterUiModel?) {
             val str:String = (item as CharacterUiModel.Header).char
             headerBinding.titleHeader.text = str
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(getItem(position)){
-            is CharacterUiModel.Item -> R.layout.item_entity
-            is CharacterUiModel.Header -> R.layout.entity_header
-            else -> throw NullPointerException("osibka")
+        return try {
+            when(getItem(position)){
+                is CharacterUiModel.Item -> R.layout.item_entity
+                is CharacterUiModel.Header -> R.layout.entity_header
+                else -> throw NullPointerException("osibka")
+            }
+        }catch (e:Exception){
+            super.getItemViewType(position)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == R.layout.item_entity) {
-            val binding = ItemEntityBinding.inflate(inflater, parent, false)
-            EntityViewHolder(binding)
-        }else {
-            val binding = EntityHeaderBinding.inflate(inflater, parent, false)
-            HeaderViewHolder(binding)
+        return when(viewType){
+            R.layout.item_entity->{
+                val binding = ItemEntityBinding.inflate(inflater, parent, false)
+                EntityViewHolder(binding)
+            }
+            R.layout.entity_header->{
+                val binding = EntityHeaderBinding.inflate(inflater, parent, false)
+                HeaderViewHolder(binding)
+            }
+            else -> throw java.lang.IllegalArgumentException("xdd")
         }
+
     }
 
 
@@ -66,7 +75,7 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
         val item = getItem(position)
         when(holder){
             is EntityViewHolder -> holder.bind(openInfoFragment, item)
-            is HeaderViewHolder -> holder.bind(null, item)
+            is HeaderViewHolder -> holder.bind(item)
         }
     }
 }
