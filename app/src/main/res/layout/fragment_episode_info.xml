@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="7dp"
-    tools:context=".fragments.episode.EpisodeInfoFragment">
+    tools:context=".ui.episode.EpisodeInfoFragment">
 
     <TextView
         android:id="@+id/name"

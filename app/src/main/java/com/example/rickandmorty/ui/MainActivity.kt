@@ -1,7 +1,8 @@
-package com.example.rickandmorty
+package com.example.rickandmorty.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.rickandmorty.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

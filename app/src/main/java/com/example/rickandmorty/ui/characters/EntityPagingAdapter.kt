@@ -1,4 +1,4 @@
-package com.example.rickandmorty.adapters
+package com.example.rickandmorty.ui.characters
 
 
 import android.os.Bundle
@@ -10,22 +10,20 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.rickandmorty.CharacterUiModel
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.EntityHeaderBinding
 import com.example.rickandmorty.databinding.ItemEntityBinding
-import com.example.rickandmorty.fragments.characters.CharacterInfoFragment
+import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
 
 typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
 
 
 
-class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction): PagingDataAdapter<CharacterUiModel,EntityPagingAdapter.VHolder>(EntityDiffCallback()) {
-    abstract class VHolder(view:View):RecyclerView.ViewHolder(view){
-        //abstract fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?)
-    }
-    class EntityViewHolder(private val entityBinding: ItemEntityBinding):VHolder(entityBinding.root) {
+class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction) : PagingDataAdapter<CharacterUiModel, EntityPagingAdapter.VHolder>(EntityDiffCallback()) {
+    abstract class VHolder(view:View):RecyclerView.ViewHolder(view)
+
+    class EntityViewHolder(private val entityBinding: ItemEntityBinding): VHolder(entityBinding.root) {
         fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
             entityBinding.itemMain.setOnClickListener {
@@ -36,7 +34,7 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction):
         }
     }
 
-    class HeaderViewHolder(private val headerBinding: EntityHeaderBinding):VHolder(headerBinding.root) {
+    class HeaderViewHolder(private val headerBinding: EntityHeaderBinding): VHolder(headerBinding.root) {
         fun bind( item: CharacterUiModel?) {
             val str:String = (item as CharacterUiModel.Header).char
             headerBinding.titleHeader.text = str
@@ -92,16 +90,13 @@ class EntityDiffCallback :DiffUtil.ItemCallback<CharacterUiModel>(){
     }
 
     override fun areContentsTheSame(oldItem: CharacterUiModel, newItem: CharacterUiModel): Boolean {
-        return when(oldItem){
-            is CharacterUiModel.Item->{
-                require(newItem is CharacterUiModel.Item)
-                oldItem == newItem
-            }
-            is CharacterUiModel.Header->{
-                require(newItem is CharacterUiModel.Header)
-                oldItem == newItem
-            }
+        if (oldItem is CharacterUiModel.Item && newItem is CharacterUiModel.Item){
+            return oldItem == newItem
         }
+        if (oldItem is CharacterUiModel.Header && newItem is CharacterUiModel.Header){
+            return oldItem == newItem
+        }
+        return false
     }
 
 

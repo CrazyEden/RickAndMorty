@@ -1,4 +1,4 @@
-package com.example.rickandmorty.fragments.characters
+package com.example.rickandmorty.ui.characterinfo
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -12,7 +12,7 @@ import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.FragmentCharacterInfoBinding
-import com.example.rickandmorty.fragments.episode.EpisodeInfoFragment
+import com.example.rickandmorty.ui.episode.EpisodeInfoFragment
 
 
 class CharacterInfoFragment : Fragment() {
@@ -68,7 +68,7 @@ class CharacterInfoFragment : Fragment() {
         binding.grid.setOnItemClickListener { _, _, position, _ ->
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag,EpisodeInfoFragment.newInstanceById(episodes[position].toInt()))
+                .replace(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceById(episodes[position].toInt()))
                 .commit()
         }
 

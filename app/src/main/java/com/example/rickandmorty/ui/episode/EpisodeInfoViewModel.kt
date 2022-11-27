@@ -1,11 +1,11 @@
-package com.example.rickandmorty.fragments.episode
+package com.example.rickandmorty.ui.episode
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.data.model.Episode
-import com.example.rickandmorty.data.reps.NetworkRep
+import com.example.rickandmorty.data.repositories.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeInfoViewModel @Inject constructor(
-    private val networkRep: NetworkRep
+    private val networkRepository: NetworkRepository
 ) :ViewModel() {
     private val _episodeLiveData = MutableLiveData<Episode>()
     val episodeLiveData = _episodeLiveData
@@ -22,7 +22,7 @@ class EpisodeInfoViewModel @Inject constructor(
 
 
     fun getEpisode(id:Int)= viewModelScope.launch(Dispatchers.IO){
-        val response = networkRep.getEpisode(id)
+        val response = networkRepository.getEpisode(id)
         if(!response.isSuccessful) throw Exception("xz")
         _episodeLiveData.postValue(response.body())
     }
@@ -32,7 +32,7 @@ class EpisodeInfoViewModel @Inject constructor(
             list.add(it.drop(42).toInt())
         }
         val str = list.joinToString(",")
-        val response = networkRep.getEntityListByListIds(str)
+        val response = networkRepository.getEntityListByListIds(str)
 
         _entityLiveData.postValue(response.body())
     }

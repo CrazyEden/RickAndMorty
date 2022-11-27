@@ -1,4 +1,4 @@
-package com.example.rickandmorty.fragments.characters
+package com.example.rickandmorty.ui.characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickandmorty.R
-import com.example.rickandmorty.adapters.EntityPagingAdapter
-import com.example.rickandmorty.adapters.MainLoadStateAdapter
 import com.example.rickandmorty.databinding.FragmentAllCharactersBinding
+import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,9 +26,9 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
 
     private lateinit var binding: FragmentAllCharactersBinding
     private val viewModel: AllCharactersViewModel by viewModels()
-    private lateinit var adapter:EntityPagingAdapter
+    private lateinit var adapter: EntityPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
-    private lateinit var textFilter:String
+    private var textFilter:String = ""
     private var genderFilter:String? = null
     private var statusFilter:String? = null
 
@@ -71,7 +70,9 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         adapter = EntityPagingAdapter{
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag, CharacterInfoFragment.newInstanceByEntity(it))
+                .replace(R.id.fragment_container_view_tag,
+                    CharacterInfoFragment.newInstanceByEntity(it)
+                )
                 .commit()
         }
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
@@ -130,7 +131,9 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
             true
         }
         binding.searchPanel.textName.addTextChangedListener {
-            textFilter = it.toString()
+            textFilter = runCatching {
+                it.toString()
+            }.getOrDefault("")
         }
         binding.searchPanel.filterStatus.setOnCheckedChangeListener { group, checkedId ->
             statusFilter = runCatching {

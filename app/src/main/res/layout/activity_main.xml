@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.fragment.app.FragmentContainerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container_view_tag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.example.rickandmorty.fragments.characters.AllCharactersFragment"
-    tools:context=".MainActivity" />
-
-
+    android:name="com.example.rickandmorty.ui.episodes.AllEpisodesFragment"
+    tools:context=".ui.MainActivity" />
+<!--    android:name="com.example.rickandmorty.ui.episodes.AllEpisodesFragment"-->
+<!--    android:name="com.example.rickandmorty.ui.characters.AllCharactersFragment"-->

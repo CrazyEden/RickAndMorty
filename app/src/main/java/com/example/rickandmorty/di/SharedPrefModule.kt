@@ -2,7 +2,7 @@ package com.example.rickandmorty.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.rickandmorty.fragments.characters.AllCharactersFragment
+import com.example.rickandmorty.ui.characters.AllCharactersFragment
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

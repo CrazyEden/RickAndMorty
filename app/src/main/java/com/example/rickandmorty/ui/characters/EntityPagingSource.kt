@@ -1,4 +1,4 @@
-package com.example.rickandmorty
+package com.example.rickandmorty.ui.characters
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -16,7 +16,7 @@ class EntityPagingSource(
     private val status:String?,
     private val gender:String?,
     private val mFilter:Boolean = false
-) :PagingSource<Int,CharacterUiModel>() {
+) :PagingSource<Int, CharacterUiModel>() {
     override fun getRefreshKey(state: PagingState<Int, CharacterUiModel>): Int? {
         val anchorn = state.anchorPosition ?: return null
         val page = state.closestPageToPosition(anchorn) ?: return null

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.characters.AllCharactersFragment" >
+    tools:context=".ui.characters.AllCharactersFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        tools:context=".fragments.characters.AllCharactersFragment"
+        tools:context=".ui.characters.AllCharactersFragment"
         tools:listitem="@layout/item_entity" />
 
     <androidx.appcompat.widget.AppCompatButton

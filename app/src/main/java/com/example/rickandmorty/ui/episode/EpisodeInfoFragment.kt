@@ -1,4 +1,4 @@
-package com.example.rickandmorty.fragments.episode
+package com.example.rickandmorty.ui.episode
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Episode
 import com.example.rickandmorty.databinding.FragmentEpisodeInfoBinding
-import com.example.rickandmorty.fragments.characters.CharacterInfoFragment
+import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,13 +35,17 @@ class EpisodeInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEpisodeInfoBinding.inflate(inflater,container,false)
-        if (id != null) {
+        if (id != 0) {
+            println(id)
+            println("TRUE")
             vModel.getEpisode(id!!)
             vModel.episodeLiveData.observe(viewLifecycleOwner){
                 initUi(it)
             }
-        }else initUi(episode?: throw NullPointerException("for the fragment require episode or id"))
-
+        }else {
+            println("false")
+            initUi(episode ?: throw NullPointerException("for the fragment require episode or id"))
+        }
 
         return binding.root
     }
@@ -62,7 +66,7 @@ class EpisodeInfoFragment : Fragment() {
                 val bundle = bundleOf(CharacterInfoFragment.ENTITY_KEY to it[position])
                 parentFragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container_view_tag,CharacterInfoFragment.newInstanceByEntity(bundle))
+                    .replace(R.id.fragment_container_view_tag, CharacterInfoFragment.newInstanceByEntity(bundle))
                     .commit()
             }
         }

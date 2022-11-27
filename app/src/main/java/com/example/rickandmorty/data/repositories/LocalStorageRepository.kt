@@ -1,7 +1,7 @@
-package com.example.rickandmorty.data.reps
+package com.example.rickandmorty.data.repositories
 
 import android.content.SharedPreferences
-import com.example.rickandmorty.fragments.characters.AllCharactersFragment
+import com.example.rickandmorty.ui.characters.AllCharactersFragment
 import javax.inject.Inject
 
 class LocalStorageRepository @Inject constructor(

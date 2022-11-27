@@ -1,13 +1,12 @@
-package com.example.rickandmorty.fragments.characters
+package com.example.rickandmorty.ui.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
-import com.example.rickandmorty.CharacterUiModel
-import com.example.rickandmorty.data.reps.LocalStorageRepository
-import com.example.rickandmorty.data.reps.NetworkRep
+import com.example.rickandmorty.data.repositories.LocalStorageRepository
+import com.example.rickandmorty.data.repositories.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllCharactersViewModel @Inject constructor(
-    private val networkRep: NetworkRep,
+    private val networkRepository: NetworkRepository,
     private val localStorageRepository: LocalStorageRepository
 ) : ViewModel() {
     fun load(name:String? = null,
@@ -23,7 +22,7 @@ class AllCharactersViewModel @Inject constructor(
              gender:String? = null,
             mFilter:Boolean = false): Flow<PagingData<CharacterUiModel>> {
 
-        return networkRep.getFlof(
+        return networkRepository.getFlof(
             name = name?: localStorageRepository.getFilterText(),
             status = status?: localStorageRepository.getStateStatusFilter(),
             gender = gender?: localStorageRepository.getStateGenderFilter(),
