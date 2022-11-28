@@ -36,14 +36,11 @@ class EpisodeInfoFragment : Fragment() {
     ): View {
         binding = FragmentEpisodeInfoBinding.inflate(inflater,container,false)
         if (id != 0) {
-            println(id)
-            println("TRUE")
             vModel.getEpisode(id!!)
             vModel.episodeLiveData.observe(viewLifecycleOwner){
                 initUi(it)
             }
         }else {
-            println("false")
             initUi(episode ?: throw NullPointerException("for the fragment require episode or id"))
         }
 

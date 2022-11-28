@@ -18,8 +18,9 @@
         android:id="@+id/mainErrorButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="center"
         android:text="@string/try_again"
+        android:visibility="gone"
         tools:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

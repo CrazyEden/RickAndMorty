@@ -38,6 +38,7 @@ class EntityPagingSource(
             return if (mFilter){
                 val mEntities = mutableListOf<Entity>()
                 entities.forEach { if (it.name!!.startsWith(name!!)) mEntities.add(it) }
+                if (mEntities.isEmpty()) throw NullPointerException("filtered list is empty")
                 LoadResult.Page(
                     data = mEntities.map { CharacterUiModel.Item(it) },
                     prevKey = pKey,

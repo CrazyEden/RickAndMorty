@@ -28,4 +28,5 @@
     <string name="list_of_characters_who_have_been_seen_in_the_episode">List of characters who have been seen in the episode</string>
     <string name="item_menu_title_all_characters">Персонажи</string>
     <string name="item_menu_title_all_episodes">Эпизоды</string>
+    <string name="exact_search">Точный поиск по имени</string>
 </resources>

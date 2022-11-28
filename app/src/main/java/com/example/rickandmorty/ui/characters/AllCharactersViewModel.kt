@@ -57,24 +57,21 @@ class AllCharactersViewModel @Inject constructor(
         }
     }
 
-    fun saveText(text:String){
-        localStorageRepository.saveFilterText(text)
-    }
+
     fun getText()= localStorageRepository.getFilterText()
 
-
-    fun saveStatus(status:String){
-        localStorageRepository.saveStatusText(status)
-    }
     fun getStatus()= localStorageRepository.getStateStatusFilter()
 
-
-    fun saveGender(gender:String){
-        localStorageRepository.saveGenderText(gender)
-    }
     fun getGender()= localStorageRepository.getStateGenderFilter()
 
-
+    fun getSwitcher()= localStorageRepository.getStateSwitcher()
+    fun saveSearchState(text:String, gender:String, status:String,switcherState:Boolean){
+        localStorageRepository.saveSearchPanelState(
+            text =text,
+            gender=gender,
+            status=status,
+            switcher = switcherState)
+    }
 
 
 }

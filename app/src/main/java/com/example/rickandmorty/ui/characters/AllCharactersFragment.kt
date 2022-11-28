@@ -10,6 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -28,9 +29,10 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
     private val viewModel: AllCharactersViewModel by viewModels()
     private lateinit var adapter: EntityPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
-    private var textFilter:String? = null
-    private var genderFilter:String? = null
-    private var statusFilter:String? = null
+    private lateinit var textFilter:String
+    private lateinit var genderFilter:String
+    private lateinit var statusFilter:String
+    private var statusSwitcher:Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,27 +43,48 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
         initClickListeners()
-        search(gender = viewModel.getGender(),
-            name = viewModel.getText(),
-            status = viewModel.getStatus())
+        initSearchPanel()
+        search()
         initChangeListeners()
         return binding.root
     }
 
+    private fun initSearchPanel() {
+        textFilter = viewModel.getText()
+        genderFilter = viewModel.getGender()
+        statusFilter = viewModel.getStatus()
+        statusSwitcher = viewModel.getSwitcher()
+        binding.searchPanel.ifStartWithSwitcher.isChecked = viewModel.getSwitcher()
+        binding.searchPanel.textName.setText(textFilter)
+        binding.searchPanel.filterStatus.check(when(statusFilter){
+            "alive"->1
+            "dead"->2
+            "unknown"->3
+            else ->-1
+        })
+        binding.searchPanel.filterGender.check(when (genderFilter){
+            "female"-> 4
+            "male"->5
+            "genderless"->6
+            "unknown"->7
+            else -> -1
+
+        })
+    }
 
 
-    private fun search(name:String?,status:String?,gender:String?,mFilter:Boolean = false){
+    private fun search(){
 
         lifecycleScope.launch {
             viewModel.load(
-                name=name?:"",
-                status=status?:"",
-                gender=gender?:"",
-                mFilter = mFilter
+                name=textFilter,
+                status=statusFilter,
+                gender=genderFilter,
+                mFilter = statusSwitcher
             ).collectLatest { adapter.submitData(it) }
         }
 
-        binding.searchPanel.searchLayout.visibility = View.GONE
+        binding.searchPanel.root.visibility = View.GONE
         binding.LOADFILTER.show()
 
     }
@@ -77,7 +100,10 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         }
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
         adapter.addLoadStateListener {
-            binding.mainErrorButton.isVisible = adapter.itemCount < 1
+            if (it.append is LoadState.NotLoading && adapter.itemCount < 1) {
+                binding.mainErrorButton.isVisible = true
+            }
+            else binding.mainErrorButton.visibility = View.GONE
         }//show retry button if cold start is failed
         return adapter.withLoadStateFooter(loadStateFooter)
 
@@ -105,29 +131,29 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
 
         binding.searchPanel.cancelSearch.setOnClickListener {
             binding.LOADFILTER.show()
-            binding.searchPanel.searchLayout.visibility = View.GONE
+            binding.searchPanel.root.visibility = View.GONE
         }
         binding.searchPanel.clearFilter.setOnClickListener {
-            binding.searchPanel.textName.text
+            binding.searchPanel.textName.setText("")
             binding.searchPanel.filterStatus.clearCheck()
             binding.searchPanel.filterGender.clearCheck()
         }
         binding.searchPanel.search.setOnClickListener {
-            search(gender = genderFilter,
-            status = statusFilter,
-            name = textFilter)
+            search()
         }
         binding.LOADFILTER.setOnClickListener {
             binding.LOADFILTER.hide()
-            binding.searchPanel.searchLayout.visibility = View.VISIBLE
+            binding.searchPanel.root.visibility = View.VISIBLE
+        }
+
+        binding.searchPanel.ifStartWithSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            statusSwitcher = isChecked
         }
     }
 
     private fun initChangeListeners() {
         binding.searchPanel.textName.setOnEditorActionListener { _, _, _ ->
-            search(gender = genderFilter,
-                status = statusFilter,
-                name = textFilter)
+            search()
             true
         }
         binding.searchPanel.textName.addTextChangedListener {
@@ -143,7 +169,7 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         binding.searchPanel.filterGender.setOnCheckedChangeListener { group, checkedId ->
             genderFilter = runCatching {
                 group.findViewById<RadioButton>(checkedId).text?.toString()
-            }.getOrDefault("")
+            }.getOrDefault("")!!
         }
     }
 
@@ -152,13 +178,17 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         const val KEY_TEXT_FILTER = "text"
         const val KEY_GENDER_FILTER = "gender"
         const val KEY_STATUS_FILTER = "status"
+        const val KEY_SWITCHER_FILTER = "switcher"
     }
 
-    override fun onDestroy() {
-        textFilter?.let { viewModel.saveGender(it) }
-        genderFilter?.let { viewModel.saveStatus(it) }
-        statusFilter?.let { viewModel.saveText(it) }
-        super.onDestroy()
+    override fun onPause() {
+        viewModel.saveSearchState(
+            text = textFilter,
+            gender = genderFilter,
+            status = statusFilter,
+            switcherState = statusSwitcher
+        )
+        super.onPause()
     }
 
 
