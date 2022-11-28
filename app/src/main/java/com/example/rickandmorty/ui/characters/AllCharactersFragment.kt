@@ -92,10 +92,9 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
     private fun initAdapter(): ConcatAdapter {
         adapter = EntityPagingAdapter{
             parentFragmentManager.beginTransaction()
+                .hide(this)
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag,
-                    CharacterInfoFragment.newInstanceByEntity(it)
-                )
+                .add(R.id.fragment_container_view_tag,CharacterInfoFragment::class.java,it)
                 .commit()
         }
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}

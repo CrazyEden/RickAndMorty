@@ -62,8 +62,9 @@ class EpisodeInfoFragment : Fragment() {
             binding.listOfCharacters.setOnItemClickListener { _, _, position, _ ->
                 val bundle = bundleOf(CharacterInfoFragment.ENTITY_KEY to it[position])
                 parentFragmentManager.beginTransaction()
+                    .hide(this)
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container_view_tag, CharacterInfoFragment.newInstanceByEntity(bundle))
+                    .add(R.id.fragment_container_view_tag, CharacterInfoFragment::class.java,bundle)
                     .commit()
             }
         }

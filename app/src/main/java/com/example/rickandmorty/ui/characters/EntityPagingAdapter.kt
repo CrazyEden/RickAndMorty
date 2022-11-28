@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -27,9 +28,12 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction) 
         fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
             entityBinding.itemMain.setOnClickListener {
-                openInfoFragment!!(bundleOf(CharacterInfoFragment.ENTITY_KEY to b))
+                val bitmap = entityBinding.avatarka.drawable.toBitmap()
+                openInfoFragment!!(bundleOf(CharacterInfoFragment.ENTITY_KEY to b,
+                "xdd" to bitmap))
             }
             entityBinding.avatarka.load(b.image)
+
             entityBinding.name.text = b.name
         }
     }

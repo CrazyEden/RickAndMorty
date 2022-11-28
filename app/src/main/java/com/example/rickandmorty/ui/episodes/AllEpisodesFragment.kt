@@ -53,10 +53,9 @@ class AllEpisodesFragment : Fragment() {
     private fun initAdapter(): ConcatAdapter {
         adapter = EpisodePagingAdapter{
             parentFragmentManager.beginTransaction()
+                .hide(this)
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag,
-                    EpisodeInfoFragment.newInstanceByEpisode(it)
-                )
+                .add(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceByEpisode(it))
                 .commit()
         }
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}

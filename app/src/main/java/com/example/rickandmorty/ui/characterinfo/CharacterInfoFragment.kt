@@ -1,6 +1,6 @@
 package com.example.rickandmorty.ui.characterinfo
 
-import android.os.Build.VERSION.SDK_INT
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.FragmentCharacterInfoBinding
@@ -25,8 +24,7 @@ class CharacterInfoFragment : Fragment() {
     private lateinit var created:String
     private lateinit var entity: Entity
     override fun onCreate(savedInstanceState: Bundle?) {
-        entity = if (SDK_INT >= 33) arguments?.getParcelable(ENTITY_KEY,Entity::class.java) ?: throw NullPointerException("for fragment require entity")
-        else (@Suppress("DEPRECATION") (arguments?.getParcelable(ENTITY_KEY)) as? Entity) ?: throw NullPointerException("for fragment require entity")
+        entity = arguments?.getParcelable(ENTITY_KEY) as? Entity ?: throw NullPointerException("for fragment require entity")
 
         species = getString(R.string.species) + entity.species
         type = getString(R.string.type) + entity.type
@@ -41,10 +39,10 @@ class CharacterInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCharacterInfoBinding.inflate(inflater,container,false)
-        binding.imageView.load(entity.image){
-            crossfade(true)
-            transformations(CircleCropTransformation())
-        }
+
+
+        binding.imageView.load(arguments?.getParcelable("xdd") as? Bitmap ?:entity.image )
+
         binding.name.text = entity.name
         binding.status.text = entity.status
         binding.species.text = species
@@ -67,8 +65,9 @@ class CharacterInfoFragment : Fragment() {
         binding.grid.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,episodes)
         binding.grid.setOnItemClickListener { _, _, position, _ ->
             parentFragmentManager.beginTransaction()
+                .hide(this)
                 .addToBackStack(null)
-                .replace(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceById(episodes[position].toInt()))
+                .add(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceById(episodes[position].toInt()))
                 .commit()
         }
 
