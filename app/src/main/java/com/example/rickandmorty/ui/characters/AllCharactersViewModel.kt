@@ -29,18 +29,29 @@ class AllCharactersViewModel @Inject constructor(
             mFilter = mFilter
         ).cachedIn(viewModelScope).map {
             it.insertSeparators { uiModel1: CharacterUiModel?, uiModel2: CharacterUiModel? ->
-                if (uiModel1 == null && uiModel2 != null)
-                    return@insertSeparators  CharacterUiModel.Header((uiModel2 as CharacterUiModel.Item).entity.name?.get(0).toString())
-
-                if (uiModel2 == null)
+                if (uiModel2 == null) //end of view
                     return@insertSeparators null
 
                 if (uiModel1 is CharacterUiModel.Header || uiModel2 is CharacterUiModel.Header)
                     return@insertSeparators null
-                val entity1 = (uiModel1 as CharacterUiModel.Item).entity.name?.get(0)
-                val entity2 = (uiModel2 as CharacterUiModel.Item).entity.name?.get(0)
-                return@insertSeparators if (entity1 != entity2){
-                    CharacterUiModel.Header(entity2.toString())
+
+                if (uiModel1 == null) {
+                    return@insertSeparators if (name == "" && (status == "" || status == "alive") && gender == "")
+                         CharacterUiModel.Header("Main Family")
+                    else
+                        CharacterUiModel.Header((uiModel2 as CharacterUiModel.Item).entity.name?.get(0).toString())
+
+                }
+                val entity1 = (uiModel1 as CharacterUiModel.Item).entity
+                val char1 = entity1.name?.get(0)
+                val char2 = (uiModel2 as CharacterUiModel.Item).entity.name?.get(0)
+
+                if ((name == "" && (status == "" || status == "alive") && gender == "") && entity1.id!! <= 4){
+                    return@insertSeparators null
+                }//for main family header
+
+                return@insertSeparators if (char1 != char2 ){
+                    CharacterUiModel.Header(char2.toString())
                 } else null
             }
         }

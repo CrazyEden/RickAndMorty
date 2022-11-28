@@ -28,7 +28,7 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
     private val viewModel: AllCharactersViewModel by viewModels()
     private lateinit var adapter: EntityPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
-    private var textFilter:String = ""
+    private var textFilter:String? = null
     private var genderFilter:String? = null
     private var statusFilter:String? = null
 
@@ -54,9 +54,9 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
 
         lifecycleScope.launch {
             viewModel.load(
-                name=name,
-                status=status,
-                gender=gender,
+                name=name?:"",
+                status=status?:"",
+                gender=gender?:"",
                 mFilter = mFilter
             ).collectLatest { adapter.submitData(it) }
         }
@@ -154,7 +154,12 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         const val KEY_STATUS_FILTER = "status"
     }
 
-
+    override fun onDestroy() {
+        textFilter?.let { viewModel.saveGender(it) }
+        genderFilter?.let { viewModel.saveStatus(it) }
+        statusFilter?.let { viewModel.saveText(it) }
+        super.onDestroy()
+    }
 
 
     
