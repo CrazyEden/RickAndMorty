@@ -5,26 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.EpisodeHeaderBinding
 import com.example.rickandmorty.databinding.ItemEpisodeBinding
-import com.example.rickandmorty.ui.episode.EpisodeInfoFragment
 
 typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
 
-class EpisodePagingAdapter(private val openInfoFragment: OpenInfoFragmentAction): PagingDataAdapter<EpisodeUiModel,EpisodePagingAdapter.VHolder>(EntityDiffCallback()) {
+class EpisodePagingAdapter: PagingDataAdapter<EpisodeUiModel,EpisodePagingAdapter.VHolder>(EntityDiffCallback()) {
     abstract class VHolder(view:View):RecyclerView.ViewHolder(view)
 
     class EpisodeViewHolder(private val episodeBinding: ItemEpisodeBinding):VHolder(episodeBinding.root) {
-        fun bind(openInfoFragment: OpenInfoFragmentAction, item: EpisodeUiModel?) {
+        fun bind(item: EpisodeUiModel?) {
             val b = (item as EpisodeUiModel.Item).episode
             episodeBinding.item.setOnClickListener {
-                openInfoFragment(bundleOf(EpisodeInfoFragment.EPISODE_KEY to b))
+                val dir= AllEpisodesFragmentDirections.actionAllEpisodesFragmentToEpisodeInfoFragment(-1,b)
+                it.findNavController().navigate(dir)
             }
             episodeBinding.codeOfEpisode.text = b.codeOfEpisode
             episodeBinding.nameOfEpisode.text = b.name
@@ -70,7 +70,7 @@ class EpisodePagingAdapter(private val openInfoFragment: OpenInfoFragmentAction)
     override fun onBindViewHolder(holder: VHolder, position: Int) {
         val item = getItem(position)
         when(holder){
-            is EpisodeViewHolder -> holder.bind(openInfoFragment, item)
+            is EpisodeViewHolder -> holder.bind(item)
             is HeaderViewHolder -> holder.bind(item)
         }
     }

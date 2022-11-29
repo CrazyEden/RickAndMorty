@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/main_group">
         <item
-            android:id="@+id/item_all_characters"
+            android:id="@+id/allCharactersFragment"
             android:title="@string/item_menu_title_all_characters"
             android:orderInCategory="0"/>
         <item
-            android:id="@+id/item_all_episodes"
+            android:id="@+id/allEpisodesFragment"
             android:title="@string/item_menu_title_all_episodes"
             android:orderInCategory="1"/>
     </group>

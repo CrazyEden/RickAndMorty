@@ -10,6 +10,7 @@
     android:layout_margin="6dp">
 
     <ImageView
+        android:transitionName="avatarka"
 
         android:foreground="@drawable/reklama"
         android:id="@+id/avatarka"

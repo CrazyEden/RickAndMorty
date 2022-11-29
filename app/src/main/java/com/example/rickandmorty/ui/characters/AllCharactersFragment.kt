@@ -17,13 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.FragmentAllCharactersBinding
-import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
+class AllCharactersFragment : Fragment() {
 
     private lateinit var binding: FragmentAllCharactersBinding
     private val viewModel: AllCharactersViewModel by viewModels()
@@ -33,19 +32,20 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
     private lateinit var genderFilter:String
     private lateinit var statusFilter:String
     private var statusSwitcher:Boolean = false
-
+    private var bool = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (bool) return binding.root //avoid fragment reload if it was loaded
         binding = FragmentAllCharactersBinding.inflate(inflater,container,false)
-
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
         initClickListeners()
         initSearchPanel()
         search()
         initChangeListeners()
+        bool = true
         return binding.root
     }
 
@@ -90,13 +90,7 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
     }
 
     private fun initAdapter(): ConcatAdapter {
-        adapter = EntityPagingAdapter{
-            parentFragmentManager.beginTransaction()
-                .hide(this)
-                .addToBackStack(null)
-                .add(R.id.fragment_container_view_tag,CharacterInfoFragment::class.java,it)
-                .commit()
-        }
+        adapter = EntityPagingAdapter()
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
         adapter.addLoadStateListener {
             if (it.append is LoadState.NotLoading && adapter.itemCount < 1) {
@@ -114,10 +108,10 @@ class AllCharactersFragment : Fragment(R.layout.fragment_all_characters) {
         layoutManager.spanSizeLookup =  object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when(adapter.getItemViewType(position)){
-                    R.layout.entity_header->2
+                    R.layout.entity_header->2//header
                     else ->{
-                        if (position == adapter.itemCount  && loadStateFooter.itemCount > 0) 2
-                        else 1
+                        if (position == adapter.itemCount  && loadStateFooter.itemCount > 0) 2//error bottom item
+                        else 1//default item
                     }
                 }
             }

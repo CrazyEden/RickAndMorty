@@ -1,17 +1,18 @@
 package com.example.rickandmorty.ui.characterinfo
 
-import android.graphics.Bitmap
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.FragmentCharacterInfoBinding
-import com.example.rickandmorty.ui.episode.EpisodeInfoFragment
 
 
 class CharacterInfoFragment : Fragment() {
@@ -23,14 +24,17 @@ class CharacterInfoFragment : Fragment() {
     private lateinit var nameLoc:String
     private lateinit var created:String
     private lateinit var entity: Entity
+    private val args:CharacterInfoFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
-        entity = arguments?.getParcelable(ENTITY_KEY) as? Entity ?: throw NullPointerException("for fragment require entity")
+        entity = args.entity
 
         species = getString(R.string.species) + entity.species
         type = getString(R.string.type) + entity.type
         nameOri = getString(R.string.name_origin) + entity.origin?.name
         nameLoc = getString(R.string.last_known_location) + entity.location?.name
         created = getString(R.string.created_at) + stringToDate(entity.created!!)
+
+
 
         super.onCreate(savedInstanceState)
     }
@@ -40,8 +44,11 @@ class CharacterInfoFragment : Fragment() {
     ): View {
         binding = FragmentCharacterInfoBinding.inflate(inflater,container,false)
 
-
-        binding.imageView.load(arguments?.getParcelable("xdd") as? Bitmap ?:entity.image )
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
+            sharedElementEnterTransition = this
+            duration = 150
+        }
+        //binding.imageView.load(arguments?.getParcelable("xdd") as? Bitmap ?:entity.image )
 
         binding.name.text = entity.name
         binding.status.text = entity.status
@@ -64,24 +71,13 @@ class CharacterInfoFragment : Fragment() {
 
         binding.grid.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,episodes)
         binding.grid.setOnItemClickListener { _, _, position, _ ->
-            parentFragmentManager.beginTransaction()
-                .hide(this)
-                .addToBackStack(null)
-                .add(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceById(episodes[position].toInt()))
-                .commit()
+            val dir = CharacterInfoFragmentDirections.actionCharacterInfoFragmentToEpisodeInfoFragment(episodes[position].toInt())
+            findNavController().navigate(dir)
         }
 
         return binding.root
     }
 
-
-
-    companion object {
-        const val ENTITY_KEY = "entity"
-        fun newInstanceByEntity(bundleWithEntity: Bundle) = CharacterInfoFragment().apply {
-            arguments = bundleWithEntity
-        }
-    }
 }
 fun stringToDate(string: String): String {
     val temp = string.split("T")

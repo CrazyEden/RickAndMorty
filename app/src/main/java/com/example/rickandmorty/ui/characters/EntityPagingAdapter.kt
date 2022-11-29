@@ -1,12 +1,11 @@
 package com.example.rickandmorty.ui.characters
 
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,26 +13,20 @@ import coil.load
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.EntityHeaderBinding
 import com.example.rickandmorty.databinding.ItemEntityBinding
-import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
-
-typealias OpenInfoFragmentAction = (bundle:Bundle) ->Unit
 
 
-
-
-class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction) : PagingDataAdapter<CharacterUiModel, EntityPagingAdapter.VHolder>(EntityDiffCallback()) {
+class EntityPagingAdapter: PagingDataAdapter<CharacterUiModel, EntityPagingAdapter.VHolder>(EntityDiffCallback()) {
     abstract class VHolder(view:View):RecyclerView.ViewHolder(view)
 
     class EntityViewHolder(private val entityBinding: ItemEntityBinding): VHolder(entityBinding.root) {
-        fun bind(openInfoFragment: OpenInfoFragmentAction?, item: CharacterUiModel?) {
+        fun bind(item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
-            entityBinding.itemMain.setOnClickListener {
-                val bitmap = entityBinding.avatarka.drawable.toBitmap()
-                openInfoFragment!!(bundleOf(CharacterInfoFragment.ENTITY_KEY to b,
-                "xdd" to bitmap))
-            }
             entityBinding.avatarka.load(b.image)
-
+            entityBinding.itemMain.setOnClickListener {
+                val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(b)
+                val ext = FragmentNavigatorExtras(entityBinding.avatarka to "avatarka")
+                it.findNavController().navigate(des,ext)
+            }
             entityBinding.name.text = b.name
         }
     }
@@ -76,7 +69,7 @@ class EntityPagingAdapter(private val openInfoFragment: OpenInfoFragmentAction) 
     override fun onBindViewHolder(holder: VHolder, position: Int) {
         val item = getItem(position)
         when(holder){
-            is EntityViewHolder -> holder.bind(openInfoFragment, item)
+            is EntityViewHolder -> holder.bind(item)
             is HeaderViewHolder -> holder.bind(item)
         }
     }

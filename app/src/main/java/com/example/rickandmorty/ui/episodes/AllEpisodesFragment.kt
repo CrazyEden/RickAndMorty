@@ -10,10 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.FragmentAllEpisodesBinding
 import com.example.rickandmorty.ui.characters.MainLoadStateAdapter
-import com.example.rickandmorty.ui.episode.EpisodeInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,13 +49,7 @@ class AllEpisodesFragment : Fragment() {
     }
 
     private fun initAdapter(): ConcatAdapter {
-        adapter = EpisodePagingAdapter{
-            parentFragmentManager.beginTransaction()
-                .hide(this)
-                .addToBackStack(null)
-                .add(R.id.fragment_container_view_tag, EpisodeInfoFragment.newInstanceByEpisode(it))
-                .commit()
-        }
+        adapter = EpisodePagingAdapter()
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
         adapter.addLoadStateListener {
             binding.mainErrorButton.isVisible = adapter.itemCount < 1

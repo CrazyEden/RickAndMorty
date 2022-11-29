@@ -1,32 +1,26 @@
 package com.example.rickandmorty.ui.episode
 
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.rickandmorty.R
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.rickandmorty.data.model.Episode
 import com.example.rickandmorty.databinding.FragmentEpisodeInfoBinding
-import com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EpisodeInfoFragment : Fragment() {
     private lateinit var binding:FragmentEpisodeInfoBinding
     private val vModel by viewModels<EpisodeInfoViewModel>()
-    private var id: Int? = null
-    private var episode: Episode? = null
+    private val args:EpisodeInfoFragmentArgs by navArgs()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        id = arguments?.getInt(ID_KEY)
-        episode = if (SDK_INT >= 33) arguments?.getParcelable(EPISODE_KEY,Episode::class.java)
-        else (@Suppress("DEPRECATION") arguments?.getParcelable(EPISODE_KEY)) as? Episode
         super.onCreate(savedInstanceState)
     }
 
@@ -35,13 +29,13 @@ class EpisodeInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEpisodeInfoBinding.inflate(inflater,container,false)
-        if (id != 0) {
-            vModel.getEpisode(id!!)
+        if (args.id != -1) {
+            vModel.getEpisode(args.id)
             vModel.episodeLiveData.observe(viewLifecycleOwner){
                 initUi(it)
             }
         }else {
-            initUi(episode ?: throw NullPointerException("for the fragment require episode or id"))
+            initUi(args.episode ?: throw NullPointerException("require id or episode"))
         }
 
         return binding.root
@@ -60,27 +54,11 @@ class EpisodeInfoFragment : Fragment() {
                     b)
             binding.load.visibility = View.GONE
             binding.listOfCharacters.setOnItemClickListener { _, _, position, _ ->
-                val bundle = bundleOf(CharacterInfoFragment.ENTITY_KEY to it[position])
-                parentFragmentManager.beginTransaction()
-                    .hide(this)
-                    .addToBackStack(null)
-                    .add(R.id.fragment_container_view_tag, CharacterInfoFragment::class.java,bundle)
-                    .commit()
+                val dir = EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(it[position])
+                findNavController().navigate(dir)
             }
         }
 
     }
-    companion object {
-        const val EPISODE_KEY = "episode"
-        const val ID_KEY = "id"
 
-        fun newInstanceByEpisode(bundleWithOneEpisode: Bundle) = EpisodeInfoFragment().apply {
-            arguments = bundleWithOneEpisode
-        }
-
-        fun newInstanceById(id:Int) = EpisodeInfoFragment().apply {
-            arguments = bundleOf( ID_KEY to id)
-        }
-
-    }
 }
