@@ -10,10 +10,7 @@
     android:layout_margin="6dp">
 
     <ImageView
-
-        android:foreground="@drawable/reklama"
         android:id="@+id/avatarka"
-        android:scaleType="centerCrop"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="200dp"

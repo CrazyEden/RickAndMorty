@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/allCharactersFragment">
+
+    <fragment
+        android:id="@+id/allCharactersFragment"
+        android:name="com.example.rickandmorty.ui.characters.AllCharactersFragment"
+        android:label="fragment_all_characters"
+        tools:layout="@layout/fragment_all_characters" >
+        <action
+            android:id="@+id/action_allCharactersFragment_to_characterInfoFragment"
+            app:destination="@id/characterInfoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/characterInfoFragment"
+        android:name="com.example.rickandmorty.ui.characterinfo.CharacterInfoFragment"
+        android:label="fragment_character_info"
+        tools:layout="@layout/fragment_character_info" >
+        <argument
+            android:name="entity"
+            app:argType="com.example.rickandmorty.data.model.Entity" />
+        <action
+            android:id="@+id/action_characterInfoFragment_to_episodeInfoFragment"
+            app:destination="@id/episodeInfoFragment" />
+        <argument
+            android:name="bitmap"
+            app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/allEpisodesFragment"
+        android:name="com.example.rickandmorty.ui.episodes.AllEpisodesFragment"
+        android:label="fragment_all_episodes"
+        tools:layout="@layout/fragment_all_episodes" >
+        <action
+            android:id="@+id/action_allEpisodesFragment_to_episodeInfoFragment"
+            app:destination="@id/episodeInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodeInfoFragment"
+        android:name="com.example.rickandmorty.ui.episode.EpisodeInfoFragment"
+        android:label="fragment_episode_info"
+        tools:layout="@layout/fragment_episode_info" >
+        <action
+            android:id="@+id/action_episodeInfoFragment_to_characterInfoFragment"
+            app:destination="@id/characterInfoFragment" />
+        <argument
+            android:name="episode"
+            app:argType="com.example.rickandmorty.data.model.Episode"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="id"
+            app:argType="integer"/>
+    </fragment>
+</navigation>

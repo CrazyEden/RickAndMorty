@@ -10,4 +10,23 @@
     <string name="name_origin">Родное место: </string>
     <string name="last_known_location">Последнее местоположение: </string>
     <string name="created_at">Дата появления в базе данных: </string>
+    <string name="status_alive" translatable="false">alive</string>
+    <string name="status_dead" translatable="false">dead</string>
+    <string name="status_unknown" translatable="false">unknown</string>
+    <string name="gender_female" translatable="false">female</string>
+    <string name="gender_male" translatable="false">male</string>
+    <string name="gender_genderless" translatable="false">genderless</string>
+    <string name="gender_unknown" translatable="false">unknown</string>
+
+    <string name="cancel_search">cancel search</string>
+    <string name="clear_filter">clear filter</string>
+    <string name="search">search</string>
+    <string name="text_a_name_of_entity_hint">Text a name of entity</string>
+    <string name="episodes">Episodes</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_of_characters_who_have_been_seen_in_the_episode">List of characters who have been seen in the episode</string>
+    <string name="item_menu_title_all_characters">Персонажи</string>
+    <string name="item_menu_title_all_episodes">Эпизоды</string>
+    <string name="exact_search">Точный поиск по имени</string>
 </resources>
