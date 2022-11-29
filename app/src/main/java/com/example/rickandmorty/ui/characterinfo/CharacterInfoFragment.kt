@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.FragmentCharacterInfoBinding
@@ -34,6 +35,10 @@ class CharacterInfoFragment : Fragment() {
         nameLoc = getString(R.string.last_known_location) + entity.location?.name
         created = getString(R.string.created_at) + stringToDate(entity.created!!)
 
+        TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
+            sharedElementEnterTransition = this
+            duration = 400
+        }
 
 
         super.onCreate(savedInstanceState)
@@ -43,13 +48,12 @@ class CharacterInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCharacterInfoBinding.inflate(inflater,container,false)
-        binding.avatarka.transitionName = entity.id.toString()
+        binding.avatarkaInfo.transitionName = entity.id.toString()
 
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
-            sharedElementEnterTransition = this
-            duration = 150
+        binding.avatarkaInfo.load(args.bitmap?: entity.image){
+            crossfade(true)
+            transformations(CircleCropTransformation())
         }
-
         binding.name.text = entity.name
         binding.status.text = entity.status
         binding.species.text = species

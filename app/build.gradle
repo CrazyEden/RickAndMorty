@@ -55,22 +55,21 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'androidx.fragment:fragment-ktx:1.5.4'
-    implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'//internet
 
     implementation("io.coil-kt:coil:2.2.2")//image by url
 
     implementation "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"//@Inject
 
-    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
-
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03'
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"//paging
 
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"//nav graph
 }
 kapt {
     correctErrorTypes true

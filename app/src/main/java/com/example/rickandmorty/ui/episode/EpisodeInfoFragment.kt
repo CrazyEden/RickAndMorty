@@ -54,7 +54,7 @@ class EpisodeInfoFragment : Fragment() {
                     b)
             binding.load.visibility = View.GONE
             binding.listOfCharacters.setOnItemClickListener { _, _, position, _ ->
-                val dir = EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(it[position])
+                val dir = EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(it[position],null)
                 findNavController().navigate(dir)
             }
         }

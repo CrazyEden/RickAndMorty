@@ -25,6 +25,10 @@
         <action
             android:id="@+id/action_characterInfoFragment_to_episodeInfoFragment"
             app:destination="@id/episodeInfoFragment" />
+        <argument
+            android:name="bitmap"
+            app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/allEpisodesFragment"

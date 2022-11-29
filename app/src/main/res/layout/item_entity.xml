@@ -9,11 +9,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:transitionName="avatarka"
-        android:foreground="@drawable/reklama"
+    <ImageView
         android:id="@+id/avatarka"
-        android:scaleType="centerCrop"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="200dp"

@@ -4,6 +4,7 @@ package com.example.rickandmorty.ui.characters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagingDataAdapter
@@ -21,10 +22,11 @@ class EntityPagingAdapter: PagingDataAdapter<CharacterUiModel, EntityPagingAdapt
     class EntityViewHolder(private val entityBinding: ItemEntityBinding): VHolder(entityBinding.root) {
         fun bind(item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
-            entityBinding.avatarka.transitionName = b.id.toString()
+            entityBinding.avatarka.transitionName = b.id.toString() + "x"
             entityBinding.avatarka.load(b.image)
             entityBinding.itemMain.setOnClickListener {
-                val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(b)
+                val bitmap = entityBinding.avatarka.drawable.toBitmap()
+                val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(b,bitmap)
                 val ext = FragmentNavigatorExtras(entityBinding.avatarka to item.entity.id.toString())
                 entityBinding.avatarka.findNavController().navigate(des,ext)
             }
