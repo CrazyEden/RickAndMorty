@@ -43,12 +43,12 @@ class CharacterInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCharacterInfoBinding.inflate(inflater,container,false)
+        binding.avatarka.transitionName = entity.id.toString()
 
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
             sharedElementEnterTransition = this
             duration = 150
         }
-        //binding.imageView.load(arguments?.getParcelable("xdd") as? Bitmap ?:entity.image )
 
         binding.name.text = entity.name
         binding.status.text = entity.status

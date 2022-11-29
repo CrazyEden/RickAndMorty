@@ -21,11 +21,12 @@ class EntityPagingAdapter: PagingDataAdapter<CharacterUiModel, EntityPagingAdapt
     class EntityViewHolder(private val entityBinding: ItemEntityBinding): VHolder(entityBinding.root) {
         fun bind(item: CharacterUiModel?) {
             val b = (item as CharacterUiModel.Item).entity
+            entityBinding.avatarka.transitionName = b.id.toString()
             entityBinding.avatarka.load(b.image)
             entityBinding.itemMain.setOnClickListener {
                 val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(b)
-                val ext = FragmentNavigatorExtras(entityBinding.avatarka to "avatarka")
-                it.findNavController().navigate(des,ext)
+                val ext = FragmentNavigatorExtras(entityBinding.avatarka to item.entity.id.toString())
+                entityBinding.avatarka.findNavController().navigate(des,ext)
             }
             entityBinding.name.text = b.name
         }

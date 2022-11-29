@@ -98,6 +98,7 @@ class AllCharactersFragment : Fragment() {
             }
             else binding.mainErrorButton.visibility = View.GONE
         }//show retry button if cold start is failed
+
         return adapter.withLoadStateFooter(loadStateFooter)
 
     }
