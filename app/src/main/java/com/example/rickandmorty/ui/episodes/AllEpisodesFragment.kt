@@ -22,15 +22,12 @@ class AllEpisodesFragment : Fragment() {
     private val viewModel: AllEpisodesViewModel by viewModels()
     private lateinit var adapter:EpisodePagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (::binding.isInitialized) return binding.root
         binding = FragmentAllEpisodesBinding.inflate(inflater,container,false)
 
         binding.rcView.adapter = initAdapter()
@@ -38,7 +35,6 @@ class AllEpisodesFragment : Fragment() {
         initClickListeners()
         search()
         initChangeListeners()
-
         return binding.root
     }
 

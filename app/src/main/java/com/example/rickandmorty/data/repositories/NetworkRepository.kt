@@ -47,4 +47,5 @@ class NetworkRepository@Inject constructor(
     suspend fun getEpisode(id:Int) = network.getEpisodeById(id)
 
     suspend fun getEntityListByListIds(listOfId:String) = network.getMultipleCharacters(listOfId)
+    suspend fun getSingleLocation(id:Int) = network.getLocationById(id)
 }

@@ -2,6 +2,7 @@ package com.example.rickandmorty.ui.locations
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,10 @@ class LocationsPagingAdapter :PagingDataAdapter<Location,LocationsPagingAdapter.
 
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
         val item = getItem(position)
+        holder.binding.root.setOnClickListener {
+            val dir = AllLocationsFragmentDirections.actionAllLocationsFragmentToLocationInfoFragment(item!!)
+            it.findNavController().navigate(dir)
+        }
         holder.binding.name.text = item?.name
     }
 

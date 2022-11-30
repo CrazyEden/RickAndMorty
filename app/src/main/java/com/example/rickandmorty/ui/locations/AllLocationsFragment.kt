@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickandmorty.databinding.FragmentAllLocationsBinding
 import com.example.rickandmorty.ui.characters.MainLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AllLocationsFragment : Fragment() {
@@ -18,6 +22,7 @@ class AllLocationsFragment : Fragment() {
     private lateinit var adapter:LocationsPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
     private val vModel:AllLocationViewModel by viewModels()
+    private var bool = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,10 +32,15 @@ class AllLocationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (::binding.isInitialized) return binding.root
+        if (bool) return binding.root
         binding = FragmentAllLocationsBinding.inflate(inflater,container,false)
         binding.rcLocation.adapter = initAdapter()
-        //binding.rcLocation.layoutManager = LinearLayoutManager(context)
-
+        binding.rcLocation.layoutManager = LinearLayoutManager(context)
+        bool = true
+        lifecycleScope.launch{
+            vModel.getFlow().collectLatest { adapter.submitData(it) }
+        }
 
 
 

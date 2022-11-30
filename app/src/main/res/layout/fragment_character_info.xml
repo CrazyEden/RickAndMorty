@@ -84,13 +84,6 @@
         tools:text="location" />
 
     <TextView
-        android:id="@+id/created"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textSize="20sp"
-        tools:text="created" />
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

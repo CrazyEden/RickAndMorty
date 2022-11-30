@@ -24,5 +24,8 @@ interface ApiInterface {
     @GET("character/{listId}")
     suspend fun getMultipleCharacters(@Path("listId") listOfId:String):Response<MutableList<Entity>>
 
+    @GET("location")
     suspend fun getAllLocations(@Query("page")page:Int):Response<ResponseAllLocation>
+    @GET("location/{id}")
+    suspend fun getLocationById(@Path("id")id:Int):Response<Location>
 }

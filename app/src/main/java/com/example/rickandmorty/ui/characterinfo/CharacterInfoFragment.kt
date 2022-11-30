@@ -1,48 +1,36 @@
 package com.example.rickandmorty.ui.characterinfo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.model.Entity
 import com.example.rickandmorty.databinding.FragmentCharacterInfoBinding
 
 
 class CharacterInfoFragment : Fragment() {
-    lateinit var binding: FragmentCharacterInfoBinding
+    private lateinit var binding: FragmentCharacterInfoBinding
 
-    private lateinit var species:String
-    private lateinit var type:String
-    private lateinit var nameOri:String
-    private lateinit var nameLoc:String
-    private lateinit var created:String
     private lateinit var entity: Entity
     private val args:CharacterInfoFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         entity = args.entity
-
-        species = getString(R.string.species) + entity.species
-        type = getString(R.string.type) + entity.type
-        nameOri = getString(R.string.name_origin) + entity.origin?.name
-        nameLoc = getString(R.string.last_known_location) + entity.location?.name
-        created = getString(R.string.created_at) + stringToDate(entity.created!!)
-
         TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
             sharedElementEnterTransition = this
             duration = 400
         }
-
-
         super.onCreate(savedInstanceState)
     }
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,25 +38,35 @@ class CharacterInfoFragment : Fragment() {
         binding = FragmentCharacterInfoBinding.inflate(inflater,container,false)
         binding.avatarkaInfo.transitionName = entity.id.toString()
 
-        binding.avatarkaInfo.load(args.bitmap?: entity.image){
-            crossfade(true)
-            transformations(CircleCropTransformation())
-        }
+        binding.avatarkaInfo.load(args.bitmap?: entity.image)
         binding.name.text = entity.name
         binding.status.text = entity.status
-        binding.species.text = species
+        binding.species.text = getString(R.string.species) + entity.species
         if (!entity.type.isNullOrEmpty()) {
             binding.type.visibility = View.VISIBLE
-            binding.type.text = type
+            binding.type.text = getString(R.string.type) + entity.type
         }
         binding.genderView.load(when(entity.gender){
             "Male"->R.drawable.ic_male
             "Female"->R.drawable.ic_female
             else ->R.drawable.ic_unknow_gender
         })
-        binding.originName.text = nameOri
-        binding.location.text = nameLoc
-        binding.created.text = created
+        binding.originName.text = getString(R.string.name_origin) + entity.origin?.name
+        binding.originName.setOnClickListener {
+            runCatching {
+                val dir = CharacterInfoFragmentDirections.actionCharacterInfoFragmentToLocationInfoFragment(
+                    id = entity.origin?.url?.split("/")?.get(5)!!.toInt())
+                findNavController().navigate(dir)
+            }.getOrElse { (Toast.makeText(context,getString(R.string.unknown_location),Toast.LENGTH_SHORT).show()) }
+        }
+        binding.location.text = getString(R.string.last_known_location) + entity.location?.name
+        binding.location.setOnClickListener {
+            runCatching {
+                val dir = CharacterInfoFragmentDirections.actionCharacterInfoFragmentToLocationInfoFragment(
+                    id = entity.location?.url?.split("/")?.get(5)!!.toInt())
+                findNavController().navigate(dir)
+            }.getOrElse { (Toast.makeText(context,getString(R.string.unknown_location),Toast.LENGTH_SHORT).show()) }
+        }
 
         val episodes = mutableListOf<String>()
         entity.episode?.forEach { episodes.add(it.split("/")[5]) }
@@ -82,9 +80,4 @@ class CharacterInfoFragment : Fragment() {
         return binding.root
     }
 
-}
-fun stringToDate(string: String): String {
-    val temp = string.split("T")
-    val day = temp[0].split("-")
-    return "${day[2]}.${day[1]}.${day[0]} | ${temp[1].split(".")[0].dropLast(3)}"
 }

@@ -62,9 +62,6 @@
         <argument
             android:name="id"
             app:argType="integer"/>
-        <action
-            android:id="@+id/action_episodeInfoFragment_to_locationInfoFragment"
-            app:destination="@id/locationInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/allLocationsFragment"
@@ -81,10 +78,16 @@
         android:label="fragment_location_info"
         tools:layout="@layout/fragment_location_info" >
         <action
-            android:id="@+id/action_locationInfoFragment_to_episodeInfoFragment"
-            app:destination="@id/episodeInfoFragment" />
-        <action
             android:id="@+id/action_locationInfoFragment_to_characterInfoFragment"
             app:destination="@id/characterInfoFragment" />
+        <argument
+            android:name="location"
+            app:argType="com.example.rickandmorty.data.model.Location"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>
