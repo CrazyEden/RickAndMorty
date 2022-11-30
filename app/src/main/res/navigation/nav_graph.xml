@@ -29,6 +29,9 @@
             android:name="bitmap"
             app:argType="android.graphics.Bitmap"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_characterInfoFragment_to_locationInfoFragment"
+            app:destination="@id/locationInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/allEpisodesFragment"
@@ -37,7 +40,11 @@
         tools:layout="@layout/fragment_all_episodes" >
         <action
             android:id="@+id/action_allEpisodesFragment_to_episodeInfoFragment"
-            app:destination="@id/episodeInfoFragment" />
+            app:destination="@id/episodeInfoFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/episodeInfoFragment"
@@ -55,5 +62,29 @@
         <argument
             android:name="id"
             app:argType="integer"/>
+        <action
+            android:id="@+id/action_episodeInfoFragment_to_locationInfoFragment"
+            app:destination="@id/locationInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allLocationsFragment"
+        android:name="com.example.rickandmorty.ui.locations.AllLocationsFragment"
+        android:label="fragment_all_locations"
+        tools:layout="@layout/fragment_all_locations" >
+        <action
+            android:id="@+id/action_allLocationsFragment_to_locationInfoFragment"
+            app:destination="@id/locationInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationInfoFragment"
+        android:name="com.example.rickandmorty.ui.LocationInfoFragment"
+        android:label="fragment_location_info"
+        tools:layout="@layout/fragment_location_info" >
+        <action
+            android:id="@+id/action_locationInfoFragment_to_episodeInfoFragment"
+            app:destination="@id/episodeInfoFragment" />
+        <action
+            android:id="@+id/action_locationInfoFragment_to_characterInfoFragment"
+            app:destination="@id/characterInfoFragment" />
     </fragment>
 </navigation>

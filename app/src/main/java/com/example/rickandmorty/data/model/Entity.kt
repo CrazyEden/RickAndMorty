@@ -29,7 +29,7 @@ data class Entity (
     val origin: Origin?,
 
     @SerializedName("location")
-    val location: Location?,
+    val location: LocationMini?,
 
     @SerializedName("image")
     val image: String?,

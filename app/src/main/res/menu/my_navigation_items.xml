@@ -9,5 +9,9 @@
             android:id="@+id/allEpisodesFragment"
             android:title="@string/item_menu_title_all_episodes"
             android:orderInCategory="1"/>
+        <item
+            android:id="@+id/allLocationsFragment"
+            android:title="@string/item_menu_title_all_locations"
+            android:orderInCategory="2"/>
     </group>
 </menu>

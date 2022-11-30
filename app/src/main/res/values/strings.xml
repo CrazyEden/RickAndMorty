@@ -29,4 +29,5 @@
     <string name="item_menu_title_all_characters">Персонажи</string>
     <string name="item_menu_title_all_episodes">Эпизоды</string>
     <string name="exact_search">Точный поиск по имени</string>
+    <string name="item_menu_title_all_locations">Локации</string>
 </resources>
