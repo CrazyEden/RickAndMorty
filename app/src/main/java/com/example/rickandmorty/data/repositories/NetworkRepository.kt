@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import com.example.rickandmorty.data.network.ApiInterface
 import com.example.rickandmorty.ui.characters.EntityPagingSource
 import com.example.rickandmorty.ui.episodes.EpisodePagingSource
+import com.example.rickandmorty.ui.locations.LocationPagingSource
 import javax.inject.Inject
 
 
@@ -34,7 +35,17 @@ class NetworkRepository@Inject constructor(
         pagingSourceFactory = { EpisodePagingSource(network) }
     ).flow
 
+    fun getLocationFlow() = Pager(
+        PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 20,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { LocationPagingSource(network)}
+    ).flow
+
     suspend fun getEpisode(id:Int) = network.getEpisodeById(id)
 
     suspend fun getEntityListByListIds(listOfId:String) = network.getMultipleCharacters(listOfId)
+    suspend fun getSingleLocation(id:Int) = network.getLocationById(id)
 }

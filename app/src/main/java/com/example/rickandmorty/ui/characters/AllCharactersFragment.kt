@@ -32,12 +32,11 @@ class AllCharactersFragment : Fragment() {
     private lateinit var genderFilter:String
     private lateinit var statusFilter:String
     private var statusSwitcher:Boolean = false
-    private var bool = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (bool) return binding.root //avoid fragment reload if it was loaded
+        if (::binding.isInitialized) return binding.root //avoid fragment reload if it was loaded
         binding = FragmentAllCharactersBinding.inflate(inflater,container,false)
         binding.rcView.adapter = initAdapter()
         binding.rcView.layoutManager = initLayoutManager()
@@ -45,7 +44,6 @@ class AllCharactersFragment : Fragment() {
         initSearchPanel()
         search()
         initChangeListeners()
-        bool = true
         return binding.root
     }
 
@@ -186,6 +184,6 @@ class AllCharactersFragment : Fragment() {
     }
 
 
-    
+
 
 }

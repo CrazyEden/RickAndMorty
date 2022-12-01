@@ -1,10 +1,7 @@
 package com.example.rickandmorty.data.network
 
 
-import com.example.rickandmorty.data.model.Entity
-import com.example.rickandmorty.data.model.Episode
-import com.example.rickandmorty.data.model.ResponseAllEntities
-import com.example.rickandmorty.data.model.ResponseAllEpisodes
+import com.example.rickandmorty.data.model.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,4 +23,9 @@ interface ApiInterface {
 
     @GET("character/{listId}")
     suspend fun getMultipleCharacters(@Path("listId") listOfId:String):Response<MutableList<Entity>>
+
+    @GET("location")
+    suspend fun getAllLocations(@Query("page")page:Int):Response<ResponseAllLocation>
+    @GET("location/{id}")
+    suspend fun getLocationById(@Path("id")id:Int):Response<Location>
 }

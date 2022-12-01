@@ -35,24 +35,22 @@ class AllCharactersViewModel @Inject constructor(
                 if (uiModel1 is CharacterUiModel.Header || uiModel2 is CharacterUiModel.Header)
                     return@insertSeparators null
 
-                if (uiModel1 == null) {
-                    return@insertSeparators if (name == "" && (status == "" || status == "alive") && gender == "")
-                         CharacterUiModel.Header("Main Family")
-                    else
-                        CharacterUiModel.Header((uiModel2 as CharacterUiModel.Item).entity.name?.get(0).toString())
-
+                val entity2 = (uiModel2 as CharacterUiModel.Item).entity
+                if (uiModel1 == null) { // start of list
+                    return@insertSeparators if (entity2.id!! <= 5) CharacterUiModel.Header("Main Family")
+                    else CharacterUiModel.Header(entity2.name?.get(0).toString())
                 }
-                val entity1 = (uiModel1 as CharacterUiModel.Item).entity
-                val char1 = entity1.name?.get(0)
-                val char2 = (uiModel2 as CharacterUiModel.Item).entity.name?.get(0)
 
-                if ((name == "" && (status == "" || status == "alive") && gender == "") && entity1.id!! <= 4){
+                if ( entity2.id!! <= 5) //for main family header
                     return@insertSeparators null
-                }//for main family header
 
-                return@insertSeparators if (char1 != char2 ){
-                    CharacterUiModel.Header(char2.toString())
-                } else null
+                val entity1 = (uiModel1 as CharacterUiModel.Item).entity
+
+                val char1 = entity1.name?.get(0)
+                val char2 = entity2.name?.get(0)
+
+                return@insertSeparators if (char1 != char2 ) CharacterUiModel.Header(char2.toString())
+                else null
             }
         }
     }

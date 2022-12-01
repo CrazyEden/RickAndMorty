@@ -1,5 +1,6 @@
 package com.example.rickandmorty.ui.episode
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,10 +41,11 @@ class EpisodeInfoFragment : Fragment() {
 
         return binding.root
     }
+    @SuppressLint("SetTextI18n")
     private fun initUi(notNullEpisode:Episode){
-        binding.name.text = notNullEpisode.name
-        binding.episode.text = notNullEpisode.codeOfEpisode
-        binding.airDate.text = notNullEpisode.airDate
+        binding.name.text = "Название эпизода:\n" + notNullEpisode.name
+        binding.episode.text = "Код эпизода:\n" + notNullEpisode.codeOfEpisode
+        binding.airDate.text = "Дата выхода:\n" + notNullEpisode.airDate
 
         vModel.getMultipleCharacters(notNullEpisode.characters!!)
         vModel.entityLiveData.observe(viewLifecycleOwner){

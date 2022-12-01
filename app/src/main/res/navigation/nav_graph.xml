@@ -29,6 +29,9 @@
             android:name="bitmap"
             app:argType="android.graphics.Bitmap"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_characterInfoFragment_to_locationInfoFragment"
+            app:destination="@id/locationInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/allEpisodesFragment"
@@ -55,5 +58,32 @@
         <argument
             android:name="id"
             app:argType="integer"/>
+    </fragment>
+    <fragment
+        android:id="@+id/allLocationsFragment"
+        android:name="com.example.rickandmorty.ui.locations.AllLocationsFragment"
+        android:label="fragment_all_locations"
+        tools:layout="@layout/fragment_all_locations" >
+        <action
+            android:id="@+id/action_allLocationsFragment_to_locationInfoFragment"
+            app:destination="@id/locationInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationInfoFragment"
+        android:name="com.example.rickandmorty.ui.LocationInfoFragment"
+        android:label="fragment_location_info"
+        tools:layout="@layout/fragment_location_info" >
+        <action
+            android:id="@+id/action_locationInfoFragment_to_characterInfoFragment"
+            app:destination="@id/characterInfoFragment" />
+        <argument
+            android:name="location"
+            app:argType="com.example.rickandmorty.data.model.Location"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>

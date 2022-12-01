@@ -1,4 +1,4 @@
-package com.example.rickandmorty.ui.episodes
+package com.example.rickandmorty.ui.locations
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,59 +10,51 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rickandmorty.databinding.FragmentAllEpisodesBinding
+import com.example.rickandmorty.databinding.FragmentAllLocationsBinding
 import com.example.rickandmorty.ui.characters.MainLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AllEpisodesFragment : Fragment() {
-    lateinit var binding:FragmentAllEpisodesBinding
-    private val viewModel: AllEpisodesViewModel by viewModels()
-    private lateinit var adapter:EpisodePagingAdapter
+class AllLocationsFragment : Fragment() {
+    private lateinit var binding:FragmentAllLocationsBinding
+    private lateinit var adapter:LocationsPagingAdapter
     private lateinit var loadStateFooter:MainLoadStateAdapter
+    private val vModel:AllLocationViewModel by viewModels()
+    private var bool = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         if (::binding.isInitialized) return binding.root
-        binding = FragmentAllEpisodesBinding.inflate(inflater,container,false)
+        if (bool) return binding.root
+        binding = FragmentAllLocationsBinding.inflate(inflater,container,false)
+        binding.rcLocation.adapter = initAdapter()
+        binding.rcLocation.layoutManager = LinearLayoutManager(context)
+        bool = true
+        lifecycleScope.launch{
+            vModel.getFlow().collectLatest { adapter.submitData(it) }
+        }
 
-        binding.rcView.adapter = initAdapter()
-        binding.rcView.layoutManager = LinearLayoutManager(context)
-        initClickListeners()
-        search()
-        initChangeListeners()
+
+
+
         return binding.root
     }
 
-    private fun search(){
-        lifecycleScope.launch {
-            viewModel.load().collectLatest { adapter.submitData(it) }
-        }
-    }
-
     private fun initAdapter(): ConcatAdapter {
-        adapter = EpisodePagingAdapter()
+        adapter = LocationsPagingAdapter()
         loadStateFooter = MainLoadStateAdapter{adapter.retry()}
         adapter.addLoadStateListener {
             binding.mainErrorButton.isVisible = adapter.itemCount < 1
         }//show retry button if cold start is failed
         return adapter.withLoadStateFooter(loadStateFooter)
-
     }
 
-
-
-    private fun initClickListeners(){
-        binding.mainErrorButton.setOnClickListener { adapter.retry() }
-
-
-    }
-
-    private fun initChangeListeners() {
-
-    }
 }

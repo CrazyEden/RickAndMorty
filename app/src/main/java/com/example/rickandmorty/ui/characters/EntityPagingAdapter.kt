@@ -26,7 +26,7 @@ class EntityPagingAdapter: PagingDataAdapter<CharacterUiModel, EntityPagingAdapt
             entityBinding.avatarka.load(b.image)
             entityBinding.itemMain.setOnClickListener {
                 val bitmap = entityBinding.avatarka.drawable.toBitmap()
-                val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(b,bitmap)
+                val des = AllCharactersFragmentDirections.actionAllCharactersFragmentToCharacterInfoFragment(entity = b, bitmap = bitmap)
                 val ext = FragmentNavigatorExtras(entityBinding.avatarka to item.entity.id.toString())
                 entityBinding.avatarka.findNavController().navigate(des,ext)
             }

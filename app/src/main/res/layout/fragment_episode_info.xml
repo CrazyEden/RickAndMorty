@@ -18,12 +18,14 @@
         tools:text="name of episode"/>
     <TextView
         android:id="@+id/airDate"
+        android:textSize="25sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         tools:text="The air date of the episode" />
     <TextView
         android:id="@+id/episode"
+        android:textSize="25sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
