@@ -17,6 +17,7 @@ class LocationInfoViewModel @Inject constructor(
 ):ViewModel() {
     private val _liveData = MutableLiveData<List<Entity>>()
     val listLiveData = _liveData
+
     private val _locationLiveData = MutableLiveData<Location>()
     val locationLiveData = _locationLiveData
 

@@ -26,7 +26,8 @@ class LocationInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLocationInfoBinding.inflate(layoutInflater,container,false)
-        if (args.id == -1) initUi(args.location?:throw NullPointerException("fragment require id or location"))
+        if (args.id == -1)
+            initUi(args.location!!)
         else {
             vModel.locationLiveData.observe(viewLifecycleOwner){
                 initUi(it)
@@ -37,18 +38,19 @@ class LocationInfoFragment : Fragment() {
     }
     @SuppressLint("SetTextI18n")
     private fun initUi(notNullLocation:Location){
-        vModel.listLiveData.observe(viewLifecycleOwner){ it ->
-            val listOfNames = it.map { item-> item.name }
-            binding.listOfResidents.adapter =
-                ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,listOfNames)
-            binding.listOfResidents.setOnItemClickListener { _, _, position, _ ->
-                val dir = LocationInfoFragmentDirections.actionLocationInfoFragmentToCharacterInfoFragment(it[position],null)
-                findNavController().navigate(dir)
+        if (!notNullLocation.residents.isNullOrEmpty()) {
+            vModel.load(notNullLocation.residents!!)
+            vModel.listLiveData.observe(viewLifecycleOwner){ it ->
+                val listOfNames = it.map { item-> item.name }
+                binding.listOfResidents.adapter =
+                    ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,listOfNames)
+                binding.listOfResidents.setOnItemClickListener { _, _, position, _ ->
+                    val dir = LocationInfoFragmentDirections.actionLocationInfoFragmentToCharacterInfoFragment(it[position],null)
+                    findNavController().navigate(dir)
+                }
             }
-            binding.progress.visibility = View.GONE
-
-        }
-        notNullLocation.residents?.toList()?.let { vModel.load(it) }
+        }else binding.listTitle.visibility = View.GONE
+        binding.progress.visibility = View.GONE
         binding.name.text = "Название местоположения:\n" + notNullLocation.name
         binding.type.text= "Тип местоположения:\n" + notNullLocation.type
         binding.dimension.text = "Измерение:\n" + notNullLocation.dimension

@@ -9,7 +9,7 @@ data class Location(
     @SerializedName("name"      ) var name: String?           = null,
     @SerializedName("type"      ) var type: String?           = null,
     @SerializedName("dimension" ) var dimension: String?           = null,
-    @SerializedName("residents" ) var residents: ArrayList<String>? = arrayListOf(),
+    @SerializedName("residents" ) var residents: List<String>? = listOf(),
     @SerializedName("url"       ) var url: String?           = null,
     @SerializedName("created"   ) var created: String?           = null
 ) : Parcelable {

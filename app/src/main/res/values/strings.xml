@@ -31,4 +31,5 @@
     <string name="exact_search">Точный поиск по имени</string>
     <string name="item_menu_title_all_locations">Локации</string>
     <string name="unknown_location">Локация не найдена</string>
+    <string name="list_of_residents">Список жителей</string>
 </resources>
